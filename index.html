@@ -1,0 +1,1534 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anúncios na Meta e Voto</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: relatório em slides (estilo instituto de pesquisa) — capa → visão geral → território → UF → associação → variação → perfil → modelos → dados */
+:root{
+  --bg:#eceff4; --surface:#ffffff; --surface-2:#f2f4f8; --line:#dde2ea; --grid:#e9edf2;
+  --ink:#0f1a33; --ink-2:#47526a; --ink-3:#7c869a;
+  --brand:#14213f; --brand-2:#1d2d55; --on-brand:#ffffff; --on-brand-2:#b9c3dc;
+  --accent:#4a3fbf; --accent-soft:#ecebfb;
+  --pt:#d03b3b; --pl:#2a78d6; --mid:#e7e6e2; --lo:#1a8f68; --hi:#d9581f;
+  --seq-0:#f0eefb; --seq-1:#c4bdf0; --seq-2:#8b7fe0; --seq-3:#5a4bc4; --seq-4:#2e2380;
+  --pos-bg:#e3f4ec; --pos-ink:#11603f; --neg-bg:#fbe7e3; --neg-ink:#8a2a17;
+  --focus:#4a3fbf;
+  --f-display:"Archivo", "Public Sans", system-ui, sans-serif;
+  --f-body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0c111c; --surface:#151b28; --surface-2:#1c2433; --line:#2a3344; --grid:#232b3a;
+  --ink:#eef1f6; --ink-2:#b3bccd; --ink-3:#7f8aa0;
+  --brand:#0a1022; --brand-2:#141d36; --on-brand:#ffffff; --on-brand-2:#a8b3cf;
+  --accent:#9a92f2; --accent-soft:#25234a;
+  --pt:#e66767; --pl:#3987e5; --mid:#3a3a37; --lo:#2fb487; --hi:#ec7a45;
+  --seq-0:#221f3d; --seq-1:#3d3576; --seq-2:#5e52b8; --seq-3:#958cf0; --seq-4:#d6d2fb;
+  --pos-bg:#13342a; --pos-ink:#8fe0b9; --neg-bg:#3d1d16; --neg-ink:#f3a996; --focus:#9a92f2;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0c111c; --surface:#151b28; --surface-2:#1c2433; --line:#2a3344; --grid:#232b3a;
+  --ink:#eef1f6; --ink-2:#b3bccd; --ink-3:#7f8aa0;
+  --brand:#0a1022; --brand-2:#141d36; --on-brand:#ffffff; --on-brand-2:#a8b3cf;
+  --accent:#9a92f2; --accent-soft:#25234a;
+  --pt:#e66767; --pl:#3987e5; --mid:#3a3a37; --lo:#2fb487; --hi:#ec7a45;
+  --seq-0:#221f3d; --seq-1:#3d3576; --seq-2:#5e52b8; --seq-3:#958cf0; --seq-4:#d6d2fb;
+  --pos-bg:#13342a; --pos-ink:#8fe0b9; --neg-bg:#3d1d16; --neg-ink:#f3a996; --focus:#9a92f2;
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.9em}
+.gutter{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.inner{max-width:1240px;margin:0 auto}
+
+/* ---------- capa ---------- */
+.cover{background:var(--brand);color:var(--on-brand);padding-block:44px 36px;position:relative;overflow:hidden}
+.cover::after{content:"";position:absolute;right:-10%;bottom:-55%;width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(74,63,191,.55), rgba(74,63,191,0) 65%);pointer-events:none}
+.cover .inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px 48px;align-items:end}
+.brandline{display:flex;align-items:center;gap:10px;font:600 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-brand-2)}
+.brandline .mark{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#d03b3b 0 50%,#2a78d6 50% 100%)}
+.cover h1{font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.02;font-weight:800;letter-spacing:-.02em;margin-top:18px}
+.cover h1 em{font-style:normal;color:#c7c1ff}
+.cover .lede{color:#fff;max-width:60ch;margin-top:14px;font-size:16px}
+.cover-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 16px;min-width:0}
+.cstat .k{font:500 11px/1.25 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--on-brand-2)}
+.cstat .v{font:800 1.7rem/1.1 var(--f-display);margin-top:6px;font-variant-numeric:tabular-nums}
+.cstat .s{font-size:12.5px;color:var(--on-brand-2);margin-top:2px}
+
+/* ---------- barra de controles ---------- */
+.toolbar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:30;background:var(--bg)}
+.toolbar .inner{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding-block:10px}
+.ctl{display:flex;align-items:center;gap:8px}
+.lab{font:500 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:2px;flex-wrap:wrap}
+.seg button{font:600 13px/1 var(--f-body);color:var(--ink-2);background:transparent;border:0;border-radius:999px;padding:7px 13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg button:disabled{opacity:.35;cursor:not-allowed}
+.spacer{flex:1}
+.btn{font:600 13px/1 var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+select{font:600 13px/1.2 var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 28px 7px 12px;max-width:100%}
+
+/* ---------- slides ---------- */
+main{padding-block:26px 60px}
+main .inner{display:flex;flex-direction:column;gap:22px}
+.slide{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px 30px 18px;display:flex;flex-direction:column;gap:18px;min-width:0;scroll-margin-top:64px}
+.slide-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 18px;align-items:center}
+.sno{font:800 1rem/1 var(--f-display);color:var(--accent);background:var(--accent-soft);border-radius:10px;padding:10px 11px;min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
+.kicker{display:block;font:600 11.5px/1.2 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.headline{font-size:clamp(1.25rem,2.4vw,1.75rem);line-height:1.18;font-weight:700;letter-spacing:-.01em;margin-top:6px}
+.deck{color:var(--ink-2);font-size:14px;margin-top:6px;max-width:80ch}
+.slide-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.slide-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;border-top:1px solid var(--grid);padding-top:10px;font-size:11.5px;color:var(--ink-3)}
+.slide-foot b{color:var(--ink-2);font-weight:600}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.block{min-width:0;display:flex;flex-direction:column;gap:10px}
+.block h3{font:700 15px/1.25 var(--f-display)}
+.sub{font-size:12.5px;color:var(--ink-2)}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink-2);align-items:center}
+.legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.ramp{display:inline-block;width:150px;height:8px;border-radius:4px;vertical-align:middle;margin:0 6px}
+
+/* visão geral */
+.versus{display:flex;flex-direction:column;gap:12px}
+.vs-row{display:grid;grid-template-columns:200px minmax(0,1fr);gap:12px;align-items:center}
+.vs-name{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vs-name b{font:700 15px/1.2 var(--f-display)}
+.vs-name span{font-size:12px;color:var(--ink-3)}
+.vs-bar{position:relative;height:42px;background:var(--surface-2);border-radius:8px;overflow:hidden}
+.vs-bar i{position:absolute;top:0;bottom:0;left:0;border-radius:8px}
+.vs-bar .val{position:absolute;top:50%;transform:translateY(-50%);font:800 1.15rem/1 var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mini{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;margin-top:4px}
+.mini th,.mini td{padding:6px 6px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+.mini{font-size:12.5px}
+.mini th{letter-spacing:.02em!important}
+.mini th{font:500 10.5px/1.2 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.mini td:first-child,.mini th:first-child{text-align:left}
+.mini tr.on td{background:var(--accent-soft);font-weight:600}
+.minibox{overflow-x:auto}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface)}
+.chip b{color:var(--ink);font-variant-numeric:tabular-nums}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+
+svg text{fill:var(--ink-2);font-family:var(--f-body)}
+svg .gridline{stroke:var(--grid)}
+svg .tile-label{font:600 11px var(--f-mono);pointer-events:none}
+svg .tile-val{font:500 9.5px var(--f-mono);pointer-events:none}
+
+#tip{position:fixed;pointer-events:none;z-index:60;background:var(--surface);color:var(--ink);border:1px solid var(--line);
+  border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.45;box-shadow:0 10px 30px rgba(10,16,34,.16);max-width:290px;opacity:0;transition:opacity .08s}
+#tip b{font-weight:700}
+#tip .row{display:flex;justify-content:space-between;gap:14px;font-variant-numeric:tabular-nums}
+
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th,table.data td{padding:7px 10px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+table.data th{font:500 10.5px/1.25 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);position:sticky;top:0;background:var(--surface);vertical-align:bottom;z-index:1}
+table.data th[data-k]{cursor:pointer}
+table.data .l{text-align:left}
+table.data .c{text-align:center}
+table.data tfoot td{font-weight:700;border-top:1px solid var(--line);border-bottom:0;background:var(--surface-2)}
+th.grp{text-align:center!important;border-bottom:1px solid var(--line)!important;font:700 12px/1.2 var(--f-body)!important;letter-spacing:0!important;text-transform:none!important;color:var(--ink)!important}
+.sep{border-left:1px solid var(--line)}
+thead tr:nth-child(2) th{top:32px}
+.tablebox{max-height:600px;overflow:auto;border:1px solid var(--grid);border-radius:10px}
+.pill{display:inline-flex;align-items:center;gap:5px;font:600 11.5px/1 var(--f-body);padding:4px 9px;border-radius:999px;white-space:nowrap}
+.pill.pos{background:var(--pos-bg);color:var(--pos-ink)}
+.pill.neg{background:var(--neg-bg);color:var(--neg-ink)}
+.lead-cell{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end}
+.lead-cell .dot{width:8px;height:8px}
+.sig{font:500 11px var(--f-mono);padding:2px 7px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)}
+.sig.yes{background:var(--ink);color:var(--surface)}
+.summary-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--ink-2)}
+.summary-line strong{color:var(--ink)}
+.tab-ctls{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.empty{border:1.5px dashed var(--line);border-radius:14px;padding:26px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;background:var(--surface-2)}
+.empty svg{color:var(--accent)}
+.empty h3{font:700 16px/1.3 var(--f-display)}
+.empty p{color:var(--ink-2);font-size:13.5px;margin-top:4px}
+.empty code{overflow-wrap:anywhere}
+.empty{min-width:0}
+.notes{columns:2 340px;column-gap:30px;color:var(--ink-2);font-size:13px}
+.notes p{margin:0 0 10px;break-inside:avoid}
+.notes b{color:var(--ink)}
+
+@media (max-width:900px){
+  .cover .inner,.cols,.cols3{grid-template-columns:minmax(0,1fr)}
+  .slide{padding:20px 16px 14px}
+  .slide-head{grid-template-columns:auto minmax(0,1fr)}
+  .slide-tools{grid-column:1 / -1;justify-content:flex-start}
+  .vs-row{grid-template-columns:minmax(0,1fr);gap:5px}
+  #scatter,#delta-PT,#delta-PL{overflow-x:auto} #scatter svg{min-width:820px} #delta-PT svg,#delta-PL svg{min-width:520px}
+  .cover-stats .cstat .v{font-size:1.35rem}
+}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important} }
+.prose{font-size:14px;color:var(--ink-2);gap:8px}
+.prose h3{color:var(--ink);margin-top:4px}
+.prose p{max-width:70ch}
+.prose ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.prose .achado{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;padding:7px 10px;color:var(--ink);font-size:13.5px}
+.prose .achado b{color:var(--accent)}
+.prose b{color:var(--ink)}
+.refs{font-size:12.5px;color:var(--ink-2);border-top:1px solid var(--grid);padding-top:10px}
+.refs summary{cursor:pointer;font:600 13px/1.4 var(--f-body);color:var(--ink)}
+.refs ul{margin:8px 0 0;padding-left:18px;columns:2 380px;column-gap:28px}
+.refs li{margin-bottom:6px;break-inside:avoid}
+/* comparação 2022 × 2026 */
+.tm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
+.tm-panel{display:flex;flex-direction:column;gap:7px;min-width:0;border-top:3px solid var(--c);padding-top:12px}
+.tm-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.tm-head b{font:700 16px/1.2 var(--f-display)}
+.tm-head span{font-size:12px;color:var(--ink-3)}
+.tm-row{display:grid;grid-template-columns:18px 214px minmax(0,1fr);gap:8px;align-items:center;font-size:13px}
+.tm-row .rk{font:700 11px/1 var(--f-body);color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums}
+.tm-row .tm-lab{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm-row.top .tm-lab{color:var(--ink);font-weight:700}
+.tm-bar{position:relative;height:20px;background:var(--surface-2);border-radius:5px}
+.tm-bar i{position:absolute;top:0;bottom:0;left:0;border-radius:5px;background:var(--c)}
+.tm-row:not(.top) .tm-bar i{opacity:.55}
+.tm-bar .val{position:absolute;top:50%;transform:translateY(-50%);font:700 12px/1 var(--f-body);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tm-empty{font-size:13px;color:var(--ink-3);padding:18px 0}
+@media (max-width:900px){ .tm-grid{grid-template-columns:minmax(0,1fr)} .tm-row{grid-template-columns:16px minmax(0,1fr);row-gap:3px;font-size:12px} .tm-row .tm-bar{grid-column:2} }
+#comp-body .block h3{min-height:2.6em}
+@media (max-width:900px){ #comp-body .block h3{min-height:0} }
+.aguardando .resultado,.aguardando .toolbar{display:none}
+.aguardando main .slide:not(#s-dados){display:none}
+.dados-card{gap:12px}
+.dados-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px 20px;flex-wrap:wrap}
+.dados-top h3{font:700 16px/1.25 var(--f-display)}
+.dados-msg{font-size:13.5px;color:var(--ink-2);margin-top:4px;max-width:78ch}
+.dados-msg.ok b{color:var(--pos-ink)} .dados-msg.err{color:var(--neg-ink)} .dados-msg.warn b{color:var(--hi)}
+#carregamento-geral{margin-top:4px;max-width:560px}
+#carregamento-texto{font-size:13px;color:var(--ink-2)}
+#barra-global{height:4px;width:100%;overflow:hidden;background:var(--line);border-radius:999px;margin-top:10px}
+#barra-global span{display:block;width:0;height:100%;border-radius:999px;background:var(--accent);transition:width .2s ease}
+#barra-global.indeterminada span{width:32%!important;animation:barra-fluxo 1.2s ease-in-out infinite}
+@keyframes barra-fluxo{from{transform:translateX(-110%)}to{transform:translateX(340%)}}
+#carregamento-ajuda{font-size:12px;color:var(--ink-3);margin-top:7px}
+@media (prefers-reduced-motion:reduce){#barra-global.indeterminada span{animation:none!important;width:45%!important}}
+.controle summary{cursor:pointer;font:600 13px var(--f-body);color:var(--accent)}
+.controle .avisos{margin:10px 0 0 18px;font-size:13px;color:var(--neg-ink)}
+.ctl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:12px 0}
+.ctl-card{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface-2);display:flex;flex-direction:column;gap:3px;min-width:0}
+.ctl-card b code{font-size:12px;overflow-wrap:anywhere} .ctl-card>span{font-size:11.5px;color:var(--ink-3)}
+.ctl-card ul{margin:4px 0 0 16px;font-size:12.5px;color:var(--ink-2)}
+.yr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.yr-block{display:flex;flex-direction:column;gap:10px;min-width:0}
+.yr-block h3{font:700 15px/1.25 var(--f-display)}
+.yr-list{display:flex;flex-direction:column;gap:9px}
+.yr-row{display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px;align-items:center}
+.yr-lab{font-size:12.5px;color:var(--ink-2);display:flex;flex-direction:column;line-height:1.25}
+.yr-lab b{color:var(--ink);font:700 13px/1.2 var(--f-display)}
+.yr-bar{position:relative;height:30px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.yr-bar i{position:absolute;top:0;bottom:0;left:0;border-radius:6px}
+.yr-bar .val{position:absolute;top:50%;transform:translateY(-50%);font:700 13px/1 var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.growth{display:flex;flex-wrap:wrap;gap:6px}
+.growth span{font:600 12px/1 var(--f-body);border-radius:999px;padding:5px 9px;background:var(--surface-2);color:var(--ink-2)}
+.growth b{color:var(--ink)}
+.qlab{font:600 10.5px var(--f-body)}
+@media (max-width:900px){ .yr-grid{grid-template-columns:minmax(0,1fr)} }
+</style>
+</head>
+<body>
+
+<header class="cover gutter">
+  <div class="inner">
+    <div>
+      <div class="brandline">Laboratório de Eleições · IESP-UERJ</div>
+      <h1>Anúncios na Meta e voto presidencial no Brasil</h1>
+      <p class="lede">Como as campanhas segmentam anúncios digitais entre regiões, grupos demográficos e temas políticos?</p>
+      <p class="lede">Natália Lucciola, Renan Suzano e Vitor Reis</p>
+    </div>
+    <div class="cover-stats" id="cover-stats"></div>
+  </div>
+</header>
+
+<div class="toolbar gutter">
+  <div class="inner">
+    <div class="ctl"><span class="lab">Eleição</span><div class="seg" id="f-ano"></div></div>
+    <div class="ctl"><span class="lab">Período</span><div class="seg" id="f-turno"></div></div>
+    <div class="ctl"><span class="lab">Gasto</span><div class="seg" id="f-faixa"></div></div>
+  </div>
+</div>
+
+<main class="gutter">
+<div class="inner">
+
+  <section class="slide dados-card" id="s-dados">
+    <div class="dados-top">
+      <div><h3>Arquivos de dados</h3><div id="dados-msg" class="dados-msg" aria-live="polite"></div></div>
+      <button class="btn" id="exportar" type="button" hidden>Baixar resultados.json</button>
+    </div>
+    <div id="carregamento-geral" aria-live="polite">
+      <div id="carregamento-texto">Localizando os arquivos de dados…</div>
+      <div id="barra-global" class="indeterminada" role="progressbar" aria-label="Carregamento geral dos dados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="barra-global-preenchimento"></span></div>
+      <div id="carregamento-ajuda">A apresentação será exibida automaticamente assim que a leitura e os cálculos terminarem.</div>
+    </div>
+    <details id="controle" class="controle" hidden></details>
+  </section>
+
+  <section class="slide" id="s-intro">
+    <div class="slide-head"><div class="sno">01</div><div><div class="kicker">Introdução</div></div></div>
+    <div class="cols">
+      <div class="block prose">
+        <h3>Contexto</h3>
+        <p>A reforma eleitoral de 2017 (Lei 13.488) autorizou candidatos, partidos e coligações a pagar pelo impulsionamento de conteúdo na internet, usado pela primeira vez nas eleições de 2018. Desde maio de 2024 o Google não aceita anúncios políticos no Brasil, o que concentra a propaganda paga nas plataformas da Meta (Facebook e Instagram).</p>
+        <p>A Biblioteca de Anúncios da Meta torna públicos, para cada anúncio político, a faixa de gasto, as impressões e a distribuição da entrega por estado, idade e gênero. Isso permite comparar o investimento das campanhas com a geografia do voto.</p>
+        <h3>Pergunta</h3>
+        <p>Nas disputas presidenciais de 2022 (Lula × Jair Bolsonaro) e 2026 (Lula × Flávio Bolsonaro), o candidato que investiu mais em anúncios pagos em cada estado foi também o que recebeu mais votos? E onde o investimento mudou, o voto acompanhou?</p>
+      </div>
+      <div class="block prose">
+        <h3>Objetivos</h3>
+        <ul>
+          <li>Medir o investimento de cada campanha na Meta por estado, por turno e na campanha inteira.</li>
+          <li>Comparar a distribuição territorial do investimento com a distribuição dos votos.</li>
+          <li>Comparar 2022 e 2026 e os dois turnos de cada eleição.</li>
+          <li>Descrever o perfil de idade e gênero de quem viu os anúncios e de quem foi votar.</li>
+          <li>Identificar os temas que concentraram o investimento de cada campanha.</li>
+        </ul>
+        <h3>Hipóteses</h3>
+        <ul>
+          <li><b>H1.</b> Nos estados em que uma campanha investiu mais que a adversária, ela também recebeu mais votos.</li>
+          <li><b>H2.</b> A variação do investimento entre períodos acompanha a variação dos votos.</li>
+          <li><b>H3.</b> As campanhas alcançaram perfis de idade e gênero diferentes.</li>
+        </ul>
+        <div class="chips" id="intro-chips"></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span><b>Fontes:</b> Lei 13.488/2017; Google, política de anúncios eleitorais no Brasil; Biblioteca de Anúncios da Meta.</span><span>Laboratório de Eleições · IESP-UERJ</span></div>
+  </section>
+
+  <section class="slide" id="s-lit">
+    <div class="slide-head"><div class="sno">02</div><div><div class="kicker">Revisão de literatura · gasto, estratégia e desempenho</div></div></div>
+    <div class="cols3">
+      <div class="block prose">
+        <h3>Investimento eleitoral e desempenho</h3>
+        <p>Mancuso (2015) organiza a produção empírica sobre investimento eleitoral em três grandes vertentes: (1) os estudos sobre a relação entre investimento e desempenho eleitoral, (2) aqueles que examinam a concessão de benefícios aos financiadores e (3) os que investigam os determinantes do investimento.</p>
+        <p class="achado"><b>No artigo:</b> o trabalho se insere na primeira vertente e trata a alocação dos recursos, onde e quando cada campanha investe, também como parte da estratégia.</p>
+        <p>Para Jacobson (1978), os gastos tendem a ter maior retorno eleitoral para os desafiantes, para quem a campanha pode ampliar o reconhecimento público que os incumbentes já possuem.</p>
+        <p class="achado"><b>No artigo:</b> os gastos tiveram menor retorno eleitoral para o desafiante em 2026: Flávio Bolsonaro investiu mais que Lula, então incumbente, e perdeu<span data-lit="gasto2026"></span>. Em 2022, o desafiante era Lula, que venceu investindo menos<span data-lit="gasto2022"></span>.</p>
+      </div>
+      <div class="block prose">
+        <h3>Gasto como estratégia</h3>
+        <p>Em revisão posterior, Jacobson (2015) reúne evidências de que campanhas afetam o conhecimento sobre candidatos, a participação e a escolha eleitoral, mas esses efeitos variam com o contexto, o tipo de eleição, o público e a mensagem.</p>
+        <p>As campanhas não alocam recursos ao acaso: podem investir onde já têm base eleitoral, onde esperam ampliar a vantagem ou onde a disputa é competitiva. Uma associação entre gasto e votação pode refletir tanto efeitos da propaganda quanto decisões estratégicas tomadas em resposta à geografia eleitoral.</p>
+        <p class="achado"><b>No artigo:</b> H1 e H2 são hipóteses de associação territorial e temporal. Sem estratégia de identificação causal, os resultados não atribuem aos anúncios um efeito independente sobre os votos.</p>
+      </div>
+      <div class="block prose">
+        <h3>Mídias sociais e desempenho eleitoral</h3>
+        <p>Barberá et al. (2019) mostram, com dados do Twitter, que legisladores tendem mais a acompanhar a atenção do público do que a liderá-la, e respondem sobretudo a seus apoiadores. No Brasil, Dias, Bülow e Gobbi (2021) mostram como enquadramentos populistas, com diagnósticos simplificados e antagonismos, sustentaram a mobilização da direita no Facebook.</p>
+        <p>Brito, Meira e Adeodato (2021), para a eleição presidencial de 2018, e Brito e Adeodato (2022), para eleições latino-americanas, encontram correlações entre desempenho nas redes e votação, sem que isso demonstre causalidade. de Camargo Penteado, Pinheiro de Paula e Pereira de Souza (2025) mostram que esse vínculo depende de fatores locais, do tipo de candidatura e da incumbência, e pedem que se separe o impulsionamento pago da comunicação orgânica.</p>
+        <p class="achado"><b>No artigo:</b> o foco recai apenas sobre os anúncios pagos pelas campanhas e registrados na Biblioteca de Anúncios da Meta.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span><b>Referências:</b> lista completa no slide seguinte</span><span>Laboratório de Eleições · IESP-UERJ</span></div>
+  </section>
+
+  <section class="slide" id="s-lit2">
+    <div class="slide-head"><div class="sno">03</div><div><div class="kicker">Revisão de literatura · mensagens, persuasão e negatividade</div></div></div>
+    <div class="cols3">
+      <div class="block prose">
+        <h3>Enquadramento e persuasão</h3>
+        <p>Para Chong e Druckman (2007), a forma de apresentar um tema importa: mensagens enfatizam aspectos diferentes de um mesmo assunto, e seus efeitos dependem das predisposições dos indivíduos e dos enquadramentos concorrentes.</p>
+        <p>Broockman e Kalla (2023) mostram que mensagens podem mudar avaliações e votos, sobretudo quando informam sobre candidatos menos conhecidos, o que ajuda a explicar por que o efeito médio das campanhas é pequeno. Em 146 experimentos de campanhas norte-americanas, Hewitt et al. (2024) encontram efeitos persuasivos variados e difíceis de prever a partir das características dos anúncios.</p>
+        <p class="achado"><b>No artigo:</b> investimento, alcance e persuasão são dimensões diferentes. A Biblioteca de Anúncios mostra gasto e entrega, não se a exposição mudou o voto.</p>
+      </div>
+      <div class="block prose">
+        <h3>Campanhas negativas</h3>
+        <p>Segundo Lau, Sigelman e Rovner (2007), a evidência disponível não sustenta a conclusão geral de que atacar adversários seja uma estratégia eficaz para conquistar votos, embora mensagens negativas possam ser mais memoráveis e aumentar o conhecimento sobre a campanha; os efeitos sobre a confiança e a eficácia política também merecem atenção.</p>
+        <p class="achado"><b>No artigo:</b> as duas campanhas recorreram bastante às mensagens negativas<span data-lit="ataques"></span>.</p>
+      </div>
+      <div class="block prose">
+        <h3>Quem ataca</h3>
+        <p>Para Nai (2020), em 172 candidatos de 35 eleições nacionais, o uso e os alvos da negatividade variam com características dos candidatos e da disputa: incumbentes tendem mais a realizar campanhas positivas, e candidatos ideologicamente distantes do centro recorrem mais à negatividade. Os ataques miram os líderes da disputa ou adversários ideologicamente distantes, inclusive por reciprocidade.</p>
+        <p class="achado"><b>2022:</b> Jair Bolsonaro, incumbente, proporcionalmente atacou menos o adversário<span data-lit="pct2022"></span>, mas investiu quase três vezes mais que Lula em anúncios desse tipo<span data-lit="gasto_at2022"></span>.</p>
+        <p class="achado"><b>2026:</b> Lula, incumbente, proporcionalmente atacou mais o adversário<span data-lit="pct2026"></span> e investiu cerca de R$ 600 mil a mais que Flávio Bolsonaro em anúncios desse tipo<span data-lit="gasto_at2026"></span>.</p>
+        <p>Quando os polos se afastam ideologicamente do centro, ocorrem mais campanhas negativas, o que ajuda a entender a negatividade dos dois lados em disputas polarizadas.</p>
+      </div>
+    </div>
+    <details class="refs"><summary>Referências</summary>
+      <ul>
+        <li>BARBERÁ, P. et al. Who leads? Who follows? Measuring issue attention and agenda setting by legislators and the mass public using social media data. <i>American Political Science Review</i>, v. 113, n. 4, p. 883-901, 2019. DOI: 10.1017/S0003055419000352.</li>
+        <li>BRITO, K.; ADEODATO, P. J. L. Measuring the performances of politicians on social media and the correlation with major Latin American election results. <i>Government Information Quarterly</i>, v. 39, 101745, 2022. DOI: 10.1016/j.giq.2022.101745.</li>
+        <li>BRITO, K.; MEIRA, S. R. L.; ADEODATO, P. J. L. <i>Information Polity</i>, 2021. DOI: 10.3233/IP-210315.</li>
+        <li>BROOCKMAN, D. E.; KALLA, J. L. When and why are campaigns' persuasive effects small? Evidence from the 2020 US presidential election. <i>American Journal of Political Science</i>, v. 67, n. 4, p. 833-849, 2023. DOI: 10.1111/ajps.12724.</li>
+        <li>CHONG, D.; DRUCKMAN, J. N. Framing theory. <i>Annual Review of Political Science</i>, v. 10, p. 103-126, 2007. DOI: 10.1146/annurev.polisci.10.072805.103054.</li>
+        <li>PENTEADO, C. L. de C.; PINHEIRO DE PAULA; PEREIRA DE SOUZA. <i>Conexión</i>, Lima, Pontificia Universidad Católica del Perú, 2025. Disponível em: revistas.pucp.edu.pe/index.php/conexion/article/view/32782.</li>
+        <li>DIAS, T.; VON BÜLOW, M.; GOBBI, D. Populist framing mechanisms and the rise of right-wing activism in Brazil. <i>Latin American Politics and Society</i>, v. 63, n. 3, p. 69-92, 2021. DOI: 10.1017/lap.2021.22.</li>
+        <li>HEWITT, L. et al. How experiments help campaigns persuade voters: evidence from a large archive of campaigns' own experiments. <i>American Political Science Review</i>, v. 118, n. 4, p. 2021-2039, 2024. DOI: 10.1017/S0003055423001387.</li>
+        <li>JACOBSON, G. C. The effects of campaign spending in congressional elections. <i>American Political Science Review</i>, v. 72, n. 2, p. 469-491, 1978.</li>
+        <li>JACOBSON, G. C. How do campaigns matter? <i>Annual Review of Political Science</i>, v. 18, p. 31-47, 2015. DOI: 10.1146/annurev-polisci-072012-113556.</li>
+        <li>LAU, R. R.; SIGELMAN, L.; ROVNER, I. B. The effects of negative political campaigns: a meta-analytic reassessment. <i>The Journal of Politics</i>, v. 69, n. 4, p. 1176-1209, 2007. DOI: 10.1111/j.1468-2508.2007.00618.x.</li>
+        <li>MANCUSO, W. P. Investimento eleitoral no Brasil: balanço da literatura (2001-2012) e agenda de pesquisa. <i>Revista de Sociologia e Política</i>, v. 23, n. 54, p. 155-183, 2015.</li>
+        <li>NAI, A. Going negative, worldwide: towards a general understanding of determinants and targets of negative campaigning. <i>Government and Opposition</i>, v. 55, n. 3, p. 430-455, 2020. DOI: 10.1017/gov.2018.32.</li>
+      </ul>
+    </details>
+    <div class="slide-foot"><span><b>Achados do artigo:</b> temas por palavras-chave, campanha inteira · “ataques” = anúncios que mencionam o adversário</span><span>Laboratório de Eleições · IESP-UERJ</span></div>
+  </section>
+
+  <section class="slide" id="s-met">
+    <div class="slide-head"><div class="sno">04</div><div><div class="kicker">Método</div></div></div>
+    <div class="cols">
+      <div class="block prose">
+        <h3>Anúncios</h3>
+        <p>Os dados vêm das exportações da Biblioteca de Anúncios da Meta das páginas de Lula, Jair Bolsonaro e Flávio Bolsonaro, feitas em 27 de outubro de 2026. Entram apenas os anúncios pagos pelas campanhas presidenciais, identificados pelo campo “Pago por”.</p>
+        <p>O investimento de cada anúncio é o ponto médio da faixa de gasto informada pela plataforma; os limites inferior e superior servem de teste de robustez (seletor “Gasto”). Além dos anúncios, contam-se as peças distintas, identificadas pelo texto, porque a Meta registra separadamente cada versão de uma mesma peça entregue a públicos ou locais diferentes.</p>
+        <h3>Votos e comparecimento</h3>
+        <p>A votação por UF vem dos arquivos de votação por seção do TSE de 2022 e 2026. O perfil de quem compareceu às urnas vem dos dados de comparecimento e abstenção, por UF, turno, gênero e faixa etária. Como o voto é secreto, esse perfil é o de quem compareceu, não o de quem votou em cada candidato.</p>
+        <h3>Temas</h3>
+        <p>Os anúncios são classificados em dez temas não exclusivos, por palavras-chave no texto, título, legenda e descrição, sem acentos e em minúsculas. O investimento de um tema é a soma do gasto dos anúncios que o mencionam.</p>
+      </div>
+      <div class="block prose">
+        <h3>Períodos e território</h3>
+        <p>Cada eleição tem dois períodos: de 16 de agosto a 2 de outubro e de 3 a 30 de outubro de 2022; de 16 de agosto a 4 de outubro e de 5 a 25 de outubro de 2026. O gasto de anúncios que atravessam a data do 1º turno é dividido pelos dias de veiculação em cada período. A campanha soma o investimento dos dois períodos e usa os votos do turno final.</p>
+        <p>O gasto de cada anúncio é distribuído entre as UFs conforme a participação de cada uma nas impressões, e a entrega por idade e gênero vem da distribuição demográfica informada pela Meta. Os dados descrevem, portanto, onde e para quem o anúncio foi entregue, não a segmentação escolhida pela campanha.</p>
+        <h3>Análise</h3>
+        <p>A associação entre investimento e votação é positiva quando a campanha que gastou mais também teve mais votos, ou quando investimento e votos variaram no mesmo sentido entre períodos. Ela é medida pela contagem de UFs com associação positiva, pela correlação de postos de Spearman (no artigo, com teste de permutação de 10 mil sorteios) e por regressões de mínimos quadrados ordinários com as 27 UFs como unidades e erros-padrão robustos HC1, lidas como associação.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span id="rodape"></span><span id="status"></span></div>
+  </section>
+
+
+  <section class="slide resultado" id="s1">
+    <div class="slide-head"><div class="sno">05</div><div><div class="kicker">Visão geral</div><h2 class="headline" hidden id="h1"></h2><p class="deck" hidden id="d1"></p></div></div>
+    <div class="cols">
+      <div class="block"><h3>Investimento em anúncios pagos</h3><div class="versus" id="vs-gasto"></div><div class="minibox"><table class="mini" id="mini-gasto"></table></div></div>
+      <div class="block"><h3>Votos recebidos</h3><div class="versus" id="vs-votos"></div><div class="minibox"><table class="mini" id="mini-votos"></table></div></div>
+    </div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span>Investimento = ponto médio das faixas da Meta · votos com o exterior · campanha: investimento dos dois turnos e votos do turno final</span></div>
+  </section>
+
+  <section class="slide resultado" id="s2">
+    <div class="slide-head"><div class="sno">06</div><div><div class="kicker" id="k-anos">Números gerais da campanha</div><h2 class="headline" hidden id="h2"></h2><p class="deck" hidden>Campanha inteira de cada eleição: investimento somado dos dois turnos, anúncios veiculados (e peças distintas) e votos no turno final. Campo PT: Lula nos dois anos; campo PL: Jair Bolsonaro (2022) e Flávio Bolsonaro (2026).</p></div></div>
+    <div class="yr-grid">
+      <div class="yr-block"><h3>Investimento na Meta</h3><div class="yr-list" id="yr-gasto"></div><div class="growth" id="gr-gasto"></div></div>
+      <div class="yr-block"><h3>Anúncios veiculados</h3><div class="yr-list" id="yr-ads"></div><div class="growth" id="gr-ads"></div></div>
+      <div class="yr-block"><h3>Votos no turno final</h3><div class="yr-list" id="yr-votos"></div><div class="growth" id="gr-votos"></div></div>
+    </div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span id="f-anos"></span></div>
+  </section>
+
+  <section class="slide resultado" id="s3">
+    <div class="slide-head"><div class="sno">07</div><div><div class="kicker">Território</div><h2 class="headline" hidden id="h3"></h2><p class="deck" hidden>A cor de cada estado indica quem ficou à frente: vermelho para o PT, azul para o PL. Quanto mais forte o tom, maior a vantagem. O número é o valor de quem ficou à frente.</p></div></div>
+    <div class="cols">
+      <div class="block"><h3 id="m1-t"></h3><div class="chart" id="map-gasto"></div></div>
+      <div class="block"><h3 id="m2-t"></h3><div class="chart" id="map-voto"></div></div>
+    </div>
+    <div class="legend" id="map-legend"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span>Passe o mouse sobre um estado para ver os valores dos dois candidatos</span></div>
+  </section>
+
+  <section class="slide resultado" id="s4">
+    <div class="slide-head"><div class="sno">08</div><div><div class="kicker">Investimento por estado</div><h2 class="headline" hidden id="h4"></h2><p class="deck" hidden>Valores em reais, PT à esquerda e PL à direita, na mesma escala. Barra cheia: quem investiu mais na UF.</p></div></div>
+    <div class="chart" id="bf-gasto"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta.</span><span>Investimento dividido entre as UFs pela distribuição das impressões de cada anúncio</span></div>
+  </section>
+
+  <section class="slide resultado" id="s5">
+    <div class="slide-head"><div class="sno">09</div><div><div class="kicker">Votos por estado</div><h2 class="headline" hidden id="h5"></h2><p class="deck" hidden>Votos de cada candidato por UF, PT à esquerda e PL à direita, na mesma escala. Barra cheia: quem teve mais votos na UF.</p></div></div>
+    <div class="chart" id="bf-votos"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> TSE, votação por seção eleitoral.</span><span>Exterior fora do gráfico</span></div>
+  </section>
+
+  <section class="slide resultado" id="s6">
+    <div class="slide-head"><div class="sno">10</div><div><div class="kicker">Investimento e voto</div><h2 class="headline" hidden id="h6"></h2><p class="deck" hidden>Cada ponto é uma UF. No eixo horizontal, quanto o PT investiu a mais (ou a menos) que o PL; no vertical, quantos votos o PT teve a mais (ou a menos). As áreas sombreadas são os estados onde quem investiu mais também teve mais votos.</p></div></div>
+    <div class="chart" id="scatter" style="max-width:940px;margin-inline:auto"></div>
+    <div class="legend" id="sc-legend" style="justify-content:center"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span>Eixos em escala de raiz quadrada para que estados pequenos e grandes apareçam juntos</span></div>
+  </section>
+
+  <section class="slide resultado" id="s7">
+    <div class="slide-head"><div class="sno">11</div><div><div class="kicker">Variação</div><h2 class="headline" hidden id="h7"></h2><p class="deck" hidden>Cada ponto é uma UF. No eixo horizontal, quanto o investimento da campanha mudou; no vertical, quanto os votos mudaram. Nas áreas sombreadas, os dois andaram juntos: investiu mais e o voto subiu, ou investiu menos e o voto caiu.</p></div>
+      <div class="slide-tools"><select id="f-comp" aria-label="Comparação"></select></div></div>
+    <div class="cols">
+      <div class="block"><h3 id="dl-PT-t"></h3><div class="chart" id="delta-PT"></div><div class="sub" id="ds-PT"></div></div>
+      <div class="block"><h3 id="dl-PL-t"></h3><div class="chart" id="delta-PL"></div><div class="sub" id="ds-PL"></div></div>
+    </div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span>Eixos em escala de raiz quadrada · ponto cheio: investimento e votos andaram juntos</span></div>
+  </section>
+
+  <section class="slide resultado" id="s10">
+    <div class="slide-head"><div class="sno">12</div><div><div class="kicker">Modelos</div><h2 class="headline" hidden>Diferença de investimento e diferença de votos nas 27 UFs</h2><p class="deck" hidden>Regressões por UF com erro-padrão robusto (HC1). O coeficiente indica quantos mil votos de diferença acompanham cada R$ 1 mil de diferença no investimento. Leia como associação: as campanhas escolhem onde anunciar.</p></div></div>
+    <div class="tablebox" id="modelos"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span>(1) PT − PL no mesmo período · (2) variação de cada campanha entre dois períodos · erro-padrão robusto (HC1) · p em destaque: p &lt; 0,05</span></div>
+  </section>
+
+  <section class="slide resultado" id="s9">
+    <div class="slide-head"><div class="sno">13</div><div><div class="kicker">Perfil · quem votou</div><h2 class="headline" hidden id="h9"></h2><p class="deck" hidden>Percentual de quem compareceu às urnas em cada faixa etária e gênero, ao lado do percentual das impressões de cada campanha nos mesmos grupos. As três grades usam a mesma escala de cor.</p></div>
+      <div class="slide-tools"><select id="f-uf2" aria-label="Território"></select></div></div>
+    <div id="comp-body"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> TSE, perfil do comparecimento e abstenção; Biblioteca de Anúncios da Meta.</span><span>Votantes de 18 anos ou mais · impressões informadas pela Meta · por UF, supõe-se o mesmo perfil em todas as UFs do anúncio, pois a Meta informa região e perfil separadamente</span></div>
+  </section>
+
+
+  <section class="slide resultado" id="s11">
+    <div class="slide-head"><div class="sno">14</div><div><div class="kicker">Dados por UF</div><h2 class="headline" hidden id="h11"></h2><p class="deck" hidden id="d11"></p></div>
+      <div class="slide-tools"><span id="copy-status" aria-live="polite" style="font-size:12px;color:var(--ink-3)"></span><button class="btn" id="copiar" type="button">Copiar tabela</button></div></div>
+    <div class="tab-ctls"><div class="seg" id="f-tab"></div><select id="f-comp2" aria-label="Comparação"></select></div>
+    <div class="summary-line" id="tab-resumo"></div>
+    <div class="tablebox" id="tabela"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta; TSE.</span><span>Clique no cabeçalho para ordenar · passe o mouse num valor para ver os dois períodos</span></div>
+  </section>
+
+  <section class="slide resultado" id="s-temas">
+    <div class="slide-head"><div class="sno">15</div><div><div class="kicker">Temas dos anúncios</div></div></div>
+    <div class="tm-grid" id="temas"></div>
+    <div class="slide-foot"><span><b>Fonte:</b> Biblioteca de Anúncios da Meta.</span><span>Barra = % do investimento da campanha em anúncios que mencionam o tema · temas por palavras-chave, não exclusivos (um anúncio pode ter vários) · em “Ataques aos adversários”, só contam termos sobre o outro candidato · passe o mouse para ver anúncios e peças</span></div>
+  </section>
+
+</div>
+</main>
+<div id="tip" role="tooltip"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO
+   Para outras eleições ou candidatos, edite só este bloco.
+   Os arquivos ficam na pasta dados/, ao lado desta página, com estes nomes.
+   ===================================================================== */
+const CONFIG = {
+  pasta: "dados/",
+  // Resultados já calculados (gerados pelo botão "Baixar resultados.json"): usados quando os
+  // arquivos originais não estão na pasta, por exemplo no GitHub Pages
+  resultados: "resultados.json",
+
+  // Lados da disputa: a chave interna é fixa (PT/PL); a sigla e a cor aparecem nos gráficos
+  lados: {
+    PT: { sigla: "PT", cor: "#d03b3b", cor_escuro: "#e66767" },
+    PL: { sigla: "PL", cor: "#2a78d6", cor_escuro: "#3987e5" }
+  },
+
+  // Exportações da Biblioteca de Anúncios da Meta e o lado de cada página
+  meta: [
+    { arquivo: "lula-meta-ad-library-2026-10-27.csv",     lado: "PT" },
+    { arquivo: "jair-meta-ad-library-2026-10-27_3.csv",   lado: "PL" },
+    { arquivo: "flavio-meta-ad-library-2026-10-27_2.csv", lado: "PL" }
+  ],
+
+  // Eleições: arquivos do TSE, janelas dos turnos e candidatos.
+  // "pagador" = texto do campo "Pago por" (sem acento, maiúsculas) que identifica a campanha.
+  eleicoes: [
+    { ano: 2022,
+      votos:  "votacao_secao_2022_BR.csv",
+      perfil: "perfil_comparecimento_abstencao_2022_BRASIL.csv",
+      turnos: [["2022-08-16", "2022-10-02"], ["2022-10-03", "2022-10-30"]],
+      candidatos: {
+        PT: { nome: "Lula",           numero: 13, pagador: "ELEICAO 2022 LUIZ INACIO LULA DA SILVA PRESIDENTE" },
+        PL: { nome: "Jair Bolsonaro", numero: 22, pagador: "JAIR MESSIAS BOLSONARO" } } },
+    { ano: 2026,
+      votos:  "votacao_secao_2026_BR.csv",
+      perfil: "perfil_comparecimento_abstencao_2026_BRASIL.csv",
+      turnos: [["2026-08-16", "2026-10-04"], ["2026-10-05", "2026-10-25"]],
+      candidatos: {
+        PT: { nome: "Lula",             numero: 13, pagador: "ELEICAO 2026 LUIZ INACIO LULA DA SILVA PRESIDENTE" },
+        PL: { nome: "Flávio Bolsonaro", numero: 22, pagador: "ELEICAO 2026 FLAVIO NANTES BOLSONARO PRESIDENTE" } } }
+  ],
+
+  // Temas: palavras-chave buscadas no texto do anúncio (minúsculas, sem acento). Não exclusivos.
+  temas: [
+    { tema: "familia",   rotulo: "Família e qualidade de vida",      padrao: "(?<!bolsa )familia|qualidade de vida|cuidado|\\bmaes\\b|filhos|pais e maes" },
+    { tema: "trabalho",  rotulo: "Trabalho e direitos trabalhistas", padrao: "trabalho|trabalhador|trabalhista|emprego|desemprego|escala 6x1|6x1|salario|jornada de trabalho" },
+    { tema: "social",    rotulo: "Programas sociais e renda",        padrao: "bolsa familia|farmacia popular|merenda escolar|combate a fome|\\bfome\\b|programas sociais|beneficios sociais|transferencia de renda|\\bbpc\\b|auxilio brasil|auxilio" },
+    { tema: "ataques",   rotulo: "Ataques aos adversários",          padrao: null },   // usa ATAQUES, por lado
+    { tema: "economia",  rotulo: "Economia e empreendedorismo",      padrao: "economia|crescimento|empreendedor|empreender|\\bmei\\b|renegociacao|divida|prosperidade|\\brenda\\b|preco|inflacao|faturamento" },
+    { tema: "voto",      rotulo: "Voto e mobilização eleitoral",     padrao: "\\bvote\\b|\\bvotem\\b|\\bvotar\\b|\\bvotos?\\b|\\burnas?\\b|segundo ?turno|dia 2 de outubro|dia 4 de outubro|dia 25|dia 30" },
+    { tema: "seguranca", rotulo: "Segurança pública",                padrao: "seguranca|\\bcrimes?\\b|criminos|\\barmas?\\b|policia|criminalidade|violencia|faccoes|faccao" },
+    { tema: "saude",     rotulo: "Saúde",                            padrao: "\\bsaude\\b|medicamento|farmacia|\\bsus\\b|vacina|pandemia|hospita|remedio" },
+    { tema: "educacao",  rotulo: "Educação",                         padrao: "educacao|escola|merenda|professor|universidade|creche|ensino|estudante" },
+    { tema: "moradia",   rotulo: "Moradia e infraestrutura",         padrao: "moradia|minha casa,? minha vida|casa propria|infraestrutura|saneamento|\\bobras?\\b|estradas?\\b|habitacao" }
+  ],
+  ataques: {
+    PT: "adversari|bolsonaro|flavio|oposicao|cortaram|cortar o orcamento|voltar ao passado|fake news|extrema direita",
+    PL: "adversari|lula|pt|fora|nunca|petista|oposicao|corrup|descondenad|ladr|voltar ao passado|fake news|retrocesso|esquerda"
+  }
+};
+/* ===================================================================== */
+
+const UFS = [["AC","Acre","Norte"],["AL","Alagoas","Nordeste"],["AP","Amapá","Norte"],["AM","Amazonas","Norte"],["BA","Bahia","Nordeste"],
+  ["CE","Ceará","Nordeste"],["DF","Distrito Federal","Centro-Oeste"],["ES","Espírito Santo","Sudeste"],["GO","Goiás","Centro-Oeste"],
+  ["MA","Maranhão","Nordeste"],["MT","Mato Grosso","Centro-Oeste"],["MS","Mato Grosso do Sul","Centro-Oeste"],["MG","Minas Gerais","Sudeste"],
+  ["PA","Pará","Norte"],["PB","Paraíba","Nordeste"],["PR","Paraná","Sul"],["PE","Pernambuco","Nordeste"],["PI","Piauí","Nordeste"],
+  ["RJ","Rio de Janeiro","Sudeste"],["RN","Rio Grande do Norte","Nordeste"],["RS","Rio Grande do Sul","Sul"],["RO","Rondônia","Norte"],
+  ["RR","Roraima","Norte"],["SC","Santa Catarina","Sul"],["SP","São Paulo","Sudeste"],["SE","Sergipe","Nordeste"],["TO","Tocantins","Norte"]];
+const LADOS = Object.keys(CONFIG.lados);
+const VERSAO_CALCULO = "2026-10-28.1";
+
+/* ---------- leitura dos arquivos (roda num Web Worker; sem dependências externas) ---------- */
+async function lerArquivo(msg, progresso){
+  const { tipo, file, url, nome } = msg;
+  let stream, total;
+  if (file) { stream = file.stream(); total = file.size; }
+  else {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error(`não foi possível ler ${nome} (HTTP ${r.status})`);
+    stream = r.body; total = +r.headers.get("content-length") || 0;
+  }
+  const reader = stream.getReader();
+  let lido = 0, ultimo = 0;
+  const avisar = () => { if (total && lido - ultimo > total / 200) { ultimo = lido; progresso(lido / total); } };
+
+  if (tipo === "meta") {
+    // CSV da Meta: UTF-8, separador vírgula, campos entre aspas que podem ter quebras de linha
+    const partes = [];
+    for (;;) { const { done, value } = await reader.read(); if (done) break; partes.push(value); lido += value.length; avisar(); }
+    const buf = new Uint8Array(lido); let o = 0; for (const p of partes) { buf.set(p, o); o += p.length; }
+    let s = new TextDecoder("utf-8").decode(buf); if (s.charCodeAt(0) === 0xFEFF) s = s.slice(1);
+    const linhas = []; let campo = "", linha = [], aspas = false;
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (aspas) {
+        if (c === '"') { if (s[i + 1] === '"') { campo += '"'; i++; } else aspas = false; }
+        else campo += c;
+      } else if (c === '"') aspas = true;
+      else if (c === ",") { linha.push(campo); campo = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && s[i + 1] === "\n") i++;
+        linha.push(campo); campo = ""; if (linha.length > 1 || linha[0] !== "") linhas.push(linha); linha = [];
+      } else campo += c;
+    }
+    if (campo !== "" || linha.length) { linha.push(campo); linhas.push(linha); }
+    const cab = linhas.shift() || [];
+    const precisa = ["ad_archive_id","byline","ad_delivery_start_time","ad_delivery_stop_time","ad_creative_bodies","ad_creative_link_titles",
+      "ad_creative_link_captions","ad_creative_link_descriptions","impressions","spend","demographic_distribution","delivery_by_region"];
+    const ix = Object.fromEntries(precisa.map(k => [k, cab.indexOf(k)]));
+    const falta = precisa.filter(k => ix[k] < 0);
+    if (falta.length) throw new Error(`${nome}: faltam as colunas ${falta.join(", ")}`);
+    progresso(1);
+    return { cabecalho: cab, linhas: linhas.map(l => Object.fromEntries(precisa.map(k => [k, l[ix[k]] ?? ""]))), bytes: lido };
+  }
+
+  // Arquivos do TSE: Latin-1, separador ";", texto entre aspas. Lidos em blocos e somados.
+  const cols = tipo === "votos"
+    ? ["ANO_ELEICAO","NR_TURNO","SG_UF","CD_CARGO","NR_VOTAVEL","QT_VOTOS"]
+    : ["ANO_ELEICAO","NR_TURNO","SG_UF","DS_GENERO","DS_FAIXA_ETARIA","QT_APTOS","QT_COMPARECIMENTO"];
+  const dec = new TextDecoder("windows-1252");
+  const tira = v => (v && v.charCodeAt(0) === 34) ? v.slice(1, v.length - 1) : (v ?? "");
+  const divide = ln => {            // divisão que respeita ";" dentro de aspas (só usada se a simples falhar)
+    const out = []; let cur = "", q = false;
+    for (let i = 0; i < ln.length; i++) { const c = ln[i];
+      if (c === '"') { if (q && ln[i + 1] === '"') { cur += '"'; i++; } else q = !q; }
+      else if (c === ";" && !q) { out.push(cur); cur = ""; } else cur += c; }
+    out.push(cur); return out;
+  };
+  let resto = "", ix = null, ncab = 0, nLinhas = 0, nUsadas = 0, nIrreg = 0;
+  const agg = new Map(), anos = new Map();
+  const processa = ln => {
+    if (ln.endsWith("\r")) ln = ln.slice(0, -1);
+    if (!ln) return;
+    if (!ix) {
+      const cab = ln.split(";").map(tira); ncab = cab.length;
+      ix = cols.map(c => cab.indexOf(c));
+      const falta = cols.filter((c, k) => ix[k] < 0);
+      if (falta.length) throw new Error(`${nome}: faltam as colunas ${falta.join(", ")}`);
+      return;
+    }
+    nLinhas++;
+    let f = ln.split(";");
+    if (f.length !== ncab) { f = divide(ln); nIrreg++; if (f.length !== ncab) return; }
+    const g = k => tira(f[ix[k]]);
+    const ano = g(0); anos.set(ano, (anos.get(ano) || 0) + 1);
+    let chave, valor, valor2 = 0;
+    if (tipo === "votos") {
+      if (g(3) !== "1") return;                       // só presidente
+      chave = g(1) + "|" + g(2) + "|" + g(4); valor = +g(5);
+    } else {
+      chave = g(1) + "|" + g(2) + "|" + g(3) + "|" + g(4); valor = +g(6); valor2 = +g(5);
+    }
+    nUsadas++;
+    const a = agg.get(chave); if (a) { a[0] += valor; a[1] += valor2; } else agg.set(chave, [valor, valor2]);
+  };
+  for (;;) {
+    const { done, value } = await reader.read(); if (done) break;
+    lido += value.length; avisar();
+    const txt = resto + dec.decode(value, { stream: true });
+    let ini = 0, pos;
+    while ((pos = txt.indexOf("\n", ini)) >= 0) { processa(txt.slice(ini, pos)); ini = pos + 1; }
+    resto = txt.slice(ini);
+  }
+  resto += dec.decode(); if (resto) processa(resto);
+  if (!ix) throw new Error(`${nome}: arquivo vazio`);
+  progresso(1);
+  return { agregado: [...agg.entries()], linhas: nLinhas, usadas: nUsadas, irregulares: nIrreg, anos: [...anos.entries()], bytes: lido };
+}
+
+const CODIGO_WORKER = `${lerArquivo.toString()}
+onmessage = e => lerArquivo(e.data, p => postMessage({ p }))
+  .then(r => postMessage({ r }), err => postMessage({ erro: String(err && err.message || err) }));`;
+let urlWorker = null;
+function executar(msg, progresso){
+  return new Promise((resolve, reject) => {
+    let w = null;
+    try { urlWorker ||= URL.createObjectURL(new Blob([CODIGO_WORKER], { type: "text/javascript" })); w = new Worker(urlWorker); }
+    catch (e) { w = null; }
+    if (!w) { lerArquivo(msg, progresso).then(resolve, reject); return; }   // navegador sem Worker: lê na página
+    w.onmessage = e => { const d = e.data;
+      if (d.p != null) progresso(d.p);
+      else if (d.erro) { w.terminate(); reject(new Error(d.erro)); }
+      else { w.terminate(); resolve(d.r); } };
+    w.onerror = e => { w.terminate(); lerArquivo(msg, progresso).then(resolve, reject); };
+    w.postMessage(msg);
+  });
+}
+
+/* ---------- utilitários de cálculo ---------- */
+const semAcento = s => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase().trim();
+const textoNorm = s => String(s ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/[“”«»]/g, '"').replace(/[‘’]/g, "'").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim();
+const limite = (s, qual) => { const m = String(s || "").match(new RegExp(qual + ": (\\d+)")); return m ? +m[1] : NaN; };
+const diaNum = s => Math.round(Date.parse(String(s).slice(0, 10) + "T00:00:00Z") / 864e5);
+const diaTxt = n => new Date(n * 864e5).toISOString().slice(0, 10);
+const jsonMeta = s => { if (!s) return []; try { return JSON.parse("[" + s + "]"); } catch (e) { return null; } };
+const REG2UF = Object.fromEntries([...UFS.map(([u, n]) => [semAcento(n), u]), ["FEDERAL DISTRICT", "DF"]]);
+const regiaoUF = r => r === "Unknown" ? "Desconhecido" : (REG2UF[semAcento(r).replace(/\s*\(STATE\)$/, "")] || "Exterior");
+const faixaDe = idade => idade < 18 ? null : idade <= 24 ? "18-24" : idade <= 34 ? "25-34" : idade <= 44 ? "35-44" : idade <= 54 ? "45-54" : idade <= 64 ? "55-64" : "65+";
+const pegar = (m, k, f) => { let v = m.get(k); if (v === undefined) { v = f(); m.set(k, v); } return v; };
+
+// Distribuição t (p bilateral) via função beta incompleta regularizada
+function lgamma(x){ const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059,
+  12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+  if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - lgamma(1 - x);
+  x -= 1; let a = c[0]; const t = x + g + 0.5; for (let i = 1; i < 9; i++) a += c[i] / (x + i);
+  return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a); }
+function betacf(a, b, x){ const MAXIT = 300, EPS = 3e-14, FPMIN = 1e-300; let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+  if (Math.abs(d) < FPMIN) d = FPMIN; d = 1 / d; let h = d;
+  for (let m = 1; m <= MAXIT; m++) { const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN; c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN; d = 1 / d; h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN; c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN; d = 1 / d;
+    const del = d * c; h *= del; if (Math.abs(del - 1) < EPS) break; }
+  return h; }
+function betai(a, b, x){ if (x <= 0) return 0; if (x >= 1) return 1;
+  const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+  return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b; }
+const pT = (t, df) => betai(df / 2, 0.5, df / (df + t * t));
+// MQO com um regressor e erro-padrão robusto HC1
+function mqo(y, x){
+  const n = y.length, k = 2; const mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n;
+  let sxx = 0, sxy = 0, syy = 0; for (let i = 0; i < n; i++) { sxx += (x[i] - mx) ** 2; sxy += (x[i] - mx) * (y[i] - my); syy += (y[i] - my) ** 2; }
+  const b1 = sxy / sxx, b0 = my - b1 * mx; const e = y.map((v, i) => v - b0 - b1 * x[i]);
+  const sx = x.reduce((a, b) => a + b, 0), sxq = x.reduce((a, b) => a + b * b, 0), det = n * sxq - sx * sx;
+  const A = [[sxq / det, -sx / det], [-sx / det, n / det]];             // (X'X)^-1
+  let m00 = 0, m01 = 0, m11 = 0; for (let i = 0; i < n; i++) { const w = e[i] * e[i]; m00 += w; m01 += w * x[i]; m11 += w * x[i] * x[i]; }
+  const M = [[m00, m01], [m01, m11]];
+  const AM = [[A[0][0] * M[0][0] + A[0][1] * M[1][0], A[0][0] * M[0][1] + A[0][1] * M[1][1]], [A[1][0] * M[0][0] + A[1][1] * M[1][0], A[1][0] * M[0][1] + A[1][1] * M[1][1]]];
+  const v11 = (AM[1][0] * A[0][1] + AM[1][1] * A[1][1]) * n / (n - k);
+  const ep = Math.sqrt(v11), t = b1 / ep, sse = e.reduce((a, b) => a + b * b, 0);
+  return { estimativa: b1, ep, p: pT(t, n - k), n, r2: 1 - sse / syy };
+}
+
+/* ---------- cálculo de todos os resultados a partir dos arquivos ---------- */
+function calcular(res){
+  const ctl = [], avisos = [];
+  const anosCfg = CONFIG.eleicoes.map(e => e.ano);
+  const eleicao = Object.fromEntries(CONFIG.eleicoes.map(e => [e.ano, e]));
+
+  // 1. Anúncios pagos pelas campanhas ("Pago por")
+  const pagadores = {}; CONFIG.eleicoes.forEach(e => LADOS.forEach(l => (pagadores[l] ||= []).push({ ano: e.ano, padrao: semAcento(e.candidatos[l].pagador) })));
+  const vistos = new Set(), ads = [];
+  CONFIG.meta.forEach(m => {
+    const r = res[m.arquivo]; const porAno = {}; let desc = 0, dup = 0, semFim = 0, jsonRuim = 0;
+    r.linhas.forEach(row => {
+      const byl = semAcento(row.byline); const pg = pagadores[m.lado].find(p => byl.includes(p.padrao));
+      if (!pg) { desc++; return; }
+      if (vistos.has(row.ad_archive_id)) { dup++; return; } vistos.add(row.ad_archive_id);
+      const e = eleicao[pg.ano]; const fimCamp = diaNum(e.turnos[e.turnos.length - 1][1]);
+      const ini = diaNum(row.ad_delivery_start_time); let fim = row.ad_delivery_stop_time ? diaNum(row.ad_delivery_stop_time) : NaN;
+      if (!isFinite(fim)) { fim = Math.max(ini, fimCamp); semFim++; }
+      const gmin = limite(row.spend, "lower_bound"), gmax0 = limite(row.spend, "upper_bound"), gmax = isFinite(gmax0) ? gmax0 : gmin;
+      const imin = limite(row.impressions, "lower_bound"), imax0 = limite(row.impressions, "upper_bound"), imax = isFinite(imax0) ? imax0 : imin;
+      const reg = jsonMeta(row.delivery_by_region), dem = jsonMeta(row.demographic_distribution);
+      if (reg === null || dem === null) jsonRuim++;
+      const ufs = new Map(); (reg || []).forEach(x => { const u = regiaoUF(x.region); ufs.set(u, (ufs.get(u) || 0) + (+x.percentage)); });
+      const texto = textoNorm([row.ad_creative_bodies, row.ad_creative_link_titles, row.ad_creative_link_captions, row.ad_creative_link_descriptions].join(" "));
+      ads.push({ ad: row.ad_archive_id, ano: pg.ano, campo: m.lado, ini, fim, gmin, gmax, gmed: (gmin + gmax) / 2, imed: (imin + imax) / 2,
+        criativo: row.ad_creative_bodies + "|" + row.ad_creative_link_titles, texto, ufs,
+        dem: (dem || []).filter(x => FAIXAS.includes(x.age) && (x.gender === "female" || x.gender === "male")).map(x => ({ f: x.age, g: x.gender, pct: +x.percentage })) });
+      porAno[pg.ano] = (porAno[pg.ano] || 0) + 1;
+    });
+    const det = [`${fmtN(r.linhas.length)} anúncios no arquivo`,
+      ...Object.entries(porAno).map(([a, n]) => `${fmtN(n)} pagos pela campanha de ${eleicao[a].candidatos[m.lado].nome} (${a})`),
+      `${fmtN(desc)} com outro “Pago por” (descartados)`];
+    if (dup) det.push(`${fmtN(dup)} repetidos em outro arquivo (contados uma vez)`);
+    if (semFim) det.push(`${fmtN(semFim)} sem data de término: considerada até o fim da campanha`);
+    if (jsonRuim) avisos.push(`${m.arquivo}: ${jsonRuim} anúncios com região ou perfil ilegível`);
+    if (!Object.keys(porAno).length) avisos.push(`${m.arquivo}: nenhum anúncio com o “Pago por” configurado`);
+    ctl.push({ arquivo: m.arquivo, tipo: "Biblioteca de Anúncios da Meta", bytes: r.bytes, detalhes: det });
+  });
+  const adPor = new Map(ads.map(a => [a.ad, a]));
+
+  // 2. Rateio por turno (dias de veiculação em cada janela)
+  const pesos = [];
+  ads.forEach(a => { const dias = a.fim - a.ini + 1;
+    eleicao[a.ano].turnos.forEach(([i, f], k) => { const ov = Math.min(a.fim, diaNum(f)) - Math.max(a.ini, diaNum(i)) + 1;
+      if (ov > 0) pesos.push({ ad: a.ad, turno: k + 1, peso: ov / dias }); }); });
+  const comPeso = new Set(pesos.map(p => p.ad));
+  const fora = ads.filter(a => !comPeso.has(a.ad)).length;
+  if (fora) avisos.push(`${fora} anúncios pagos pelas campanhas foram veiculados só fora das janelas dos turnos e não entram no investimento`);
+
+  // cobertura
+  const cob = new Map();
+  ads.forEach(a => { const o = pegar(cob, a.ano + "|" + a.campo, () => ({ ano: a.ano, campo: a.campo, ini: Infinity, fim: -Infinity, ads: new Set(), pecas: new Set() }));
+    o.ini = Math.min(o.ini, a.ini); o.fim = Math.max(o.fim, a.fim); o.ads.add(a.ad); o.pecas.add(a.criativo); });
+  const cobertura = [...cob.values()].map(o => ({ ano: o.ano, campo: o.campo, primeiro: diaTxt(o.ini), ultimo: diaTxt(o.fim), n: o.ads.size, pecas: o.pecas.size }));
+
+  // resumo nacional
+  const rsm = new Map();
+  pesos.forEach(p => { const a = adPor.get(p.ad); const o = pegar(rsm, a.ano + "|" + p.turno + "|" + a.campo, () => ({ ano: a.ano, turno: p.turno, campo: a.campo,
+      ads: new Set(), pecas: new Set(), gasto_min: 0, gasto_med: 0, gasto_max: 0, impr_med: 0 }));
+    o.ads.add(a.ad); o.pecas.add(a.criativo); o.gasto_min += a.gmin * p.peso; o.gasto_med += a.gmed * p.peso; o.gasto_max += a.gmax * p.peso; o.impr_med += a.imed * p.peso; });
+  const resumo = [...rsm.values()].map(o => ({ ano: o.ano, turno: o.turno, campo: o.campo, n_anuncios: o.ads.size, n_pecas: o.pecas.size,
+    gasto_min: o.gasto_min, gasto_med: o.gasto_med, gasto_max: o.gasto_max, impr_med: o.impr_med }));
+
+  // por UF
+  const preg = new Map();
+  pesos.forEach(p => { const a = adPor.get(p.ad);
+    a.ufs.forEach((pct, u) => { const w = p.peso * pct; const o = pegar(preg, a.ano + "|" + p.turno + "|" + a.campo + "|" + u,
+        () => ({ ano: a.ano, turno: p.turno, campo: a.campo, uf: u, gasto_min: 0, gasto_med: 0, gasto_max: 0, impr_med: 0, n_anuncios: 0 }));
+      o.gasto_min += a.gmin * w; o.gasto_med += a.gmed * w; o.gasto_max += a.gmax * w; o.impr_med += a.imed * w; if (pct >= 0.01) o.n_anuncios++; }); });
+  const fora_uf = [...preg.values()].filter(o => o.uf === "Exterior" || o.uf === "Desconhecido");
+
+  // 3. Votos (TSE)
+  const votosAgg = {}, totais = [];
+  CONFIG.eleicoes.forEach(e => { const r = res[e.votos]; const m = new Map(r.agregado.map(([k, v]) => [k, v[0]]));
+    votosAgg[e.ano] = m;
+    const turnos = [...new Set(r.agregado.map(([k]) => +k.split("|")[0]))].sort();
+    const tot = {}; r.agregado.forEach(([k, v]) => { const [t, , nr] = k.split("|"); LADOS.forEach(l => { if (+nr === e.candidatos[l].numero) tot[t + "|" + l] = (tot[t + "|" + l] || 0) + v[0]; }); });
+    turnos.forEach(t => LADOS.forEach(l => totais.push({ ano: e.ano, turno: t, campo: l, votos: tot[t + "|" + l] || 0 })));
+    const det = [`${fmtN(r.linhas)} linhas lidas; ${fmtN(r.usadas)} de presidente (CD_CARGO = 1)`,
+      ...turnos.map(t => `${t}º turno: ${LADOS.map(l => `${e.candidatos[l].nome} ${fmtN(tot[t + "|" + l] || 0)}`).join(" · ")} votos`)];
+    const anosArq = r.anos.map(([a]) => a).filter(Boolean);
+    if (anosArq.some(a => +a !== e.ano)) avisos.push(`${e.votos}: o arquivo traz ANO_ELEICAO = ${anosArq.join(", ")}, diferente de ${e.ano}`);
+    LADOS.forEach(l => { if (!turnos.some(t => tot[t + "|" + l] > 0)) avisos.push(`${e.votos}: nenhum voto para o número ${e.candidatos[l].numero} (${e.candidatos[l].nome})`); });
+    if (r.irregulares) det.push(`${fmtN(r.irregulares)} linhas com ";" dentro de aspas (lidas campo a campo)`);
+    ctl.push({ arquivo: e.votos, tipo: "TSE · votação por seção", bytes: r.bytes, detalhes: det });
+  });
+  const temVotos = (ano, t) => totais.some(x => x.ano === ano && x.turno === t);
+
+  // grade UF × ano × turno × lado
+  const ufTab = [];
+  anosCfg.forEach(ano => [1, 2].forEach(t => LADOS.forEach(c => UFS.forEach(([u, nome_uf, regiao]) => {
+    const g = preg.get(ano + "|" + t + "|" + c + "|" + u) || {};
+    const votos = temVotos(ano, t) ? (votosAgg[ano].get(t + "|" + u + "|" + eleicao[ano].candidatos[c].numero) || 0) : null;
+    ufTab.push({ ano, turno: t, uf: u, nome_uf, regiao, campo: c, votos, gasto_min: g.gasto_min || 0, gasto_med: g.gasto_med || 0,
+      gasto_max: g.gasto_max || 0, impr_med: g.impr_med || 0, n_anuncios: g.n_anuncios || 0 });
+  }))));
+
+  // 4. Perfil das impressões (Brasil e por UF)
+  const seg = new Map();
+  pesos.forEach(p => { const a = adPor.get(p.ad);
+    a.dem.forEach(d => { const base = a.imed * p.peso * d.pct;
+      const o = pegar(seg, `${a.ano}|${p.turno}|${a.campo}|BR|${d.f}|${d.g}`, () => ({ ano: a.ano, turno: p.turno, campo: a.campo, uf: "BR", faixa: d.f, genero: d.g, impr: 0 })); o.impr += base;
+      a.ufs.forEach((pu, u) => { if (u === "Exterior" || u === "Desconhecido") return;
+        const q = pegar(seg, `${a.ano}|${p.turno}|${a.campo}|${u}|${d.f}|${d.g}`, () => ({ ano: a.ano, turno: p.turno, campo: a.campo, uf: u, faixa: d.f, genero: d.g, impr: 0 })); q.impr += base * pu; }); }); });
+
+  // 5. Perfil de quem compareceu (TSE)
+  const comp = new Map(), ufSet = new Set(UFS.map(x => x[0]));
+  CONFIG.eleicoes.forEach(e => { const r = res[e.perfil]; const tot = {}, tot18 = {};
+    r.agregado.forEach(([k, v]) => { const [t, uf, gen, fx] = k.split("|"); const g = semAcento(gen);
+      tot[t] = (tot[t] || 0) + v[0];
+      const genero = g.startsWith("FEM") ? "female" : g.startsWith("MASC") ? "male" : null; const m = fx.match(/\d+/); const faixa = m ? faixaDe(+m[0]) : null;
+      if (!genero || !faixa) return; tot18[t] = (tot18[t] || 0) + v[0];
+      [ufSet.has(uf) ? uf : null, "BR"].forEach(u => { if (!u) return;
+        const o = pegar(comp, `${e.ano}|${t}|${u}|${faixa}|${genero}`, () => ({ ano: e.ano, turno: +t, uf: u, faixa, genero, comparecimento: 0 })); o.comparecimento += v[0]; }); });
+    const turnos = Object.keys(tot).sort();
+    const det = [`${fmtN(r.linhas)} linhas lidas`, ...turnos.map(t => `${t}º turno: ${fmtN(tot[t])} compareceram (${fmtN(tot18[t])} com 18 anos ou mais e gênero informado)`)];
+    if (turnos.length < e.turnos.length) det.push(`O arquivo só tem o ${turnos.map(t => t + "º").join(" e ")} turno`);
+    const anosArq = r.anos.map(([a]) => a).filter(Boolean);
+    if (anosArq.some(a => +a !== e.ano)) avisos.push(`${e.perfil}: o arquivo traz ANO_ELEICAO = ${anosArq.join(", ")}, diferente de ${e.ano}`);
+    ctl.push({ arquivo: e.perfil, tipo: "TSE · perfil do comparecimento", bytes: r.bytes, detalhes: det });
+  });
+
+  // 6. Modelos (UF; MQO com erro-padrão HC1). Votos em mil; investimento em R$ mil.
+  const S = l => CONFIG.lados[l].sigla;
+  const W = {}; // W[ano|turno] = {uf: {gPT,gPL,vPT,vPL}}
+  anosCfg.forEach(ano => { [1, 2].forEach(t => { const o = {}; ufTab.filter(r => r.ano === ano && r.turno === t).forEach(r => { const u = (o[r.uf] ||= {});
+      u["g" + r.campo] = r.gasto_med; u["v" + r.campo] = r.votos ?? 0; }); W[ano + "|" + t] = o; });
+    const tf = temVotos(ano, 2) ? 2 : 1; const c = {};
+    UFS.forEach(([u]) => { c[u] = {}; LADOS.forEach(l => { c[u]["g" + l] = W[ano + "|1"][u]["g" + l] + W[ano + "|2"][u]["g" + l]; c[u]["v" + l] = W[ano + "|" + tf][u]["v" + l]; }); });
+    W[ano + "|3"] = c; });
+  const [A, B] = LADOS, NP = ["1º turno", "2º turno", "campanha"], modelos = [];
+  anosCfg.forEach(ano => [1, 2, 3].forEach(t => { const w = W[ano + "|" + t]; const us = UFS.map(x => x[0]);
+    if (!(us.reduce((s, u) => s + w[u]["g" + A], 0) > 0 && us.reduce((s, u) => s + w[u]["g" + B], 0) > 0)) return;
+    if (t < 3 && !temVotos(ano, t)) return;
+    const m = mqo(us.map(u => (w[u]["v" + A] - w[u]["v" + B]) / 1000), us.map(u => (w[u]["g" + A] - w[u]["g" + B]) / 1000));
+    modelos.push({ modelo: `(1) Dif. votos ${S(A)} − ${S(B)} · ${NP[t - 1]} ${ano}`, termo: `Dif. investimento ${S(A)} − ${S(B)} (R$ mil)`, ...m }); }));
+  const cmpM = [];
+  if (anosCfg.length > 1) cmpM.push([`campanha ${anosCfg[0]} → ${anosCfg.at(-1)}`, anosCfg[0] + "|3", anosCfg.at(-1) + "|3"]);
+  const ult = anosCfg.at(-1); if (temVotos(ult, 1) && temVotos(ult, 2)) cmpM.push([`${ult}: 1º → 2º turno`, ult + "|1", ult + "|2"]);
+  cmpM.forEach(([rot, r0, r1]) => LADOS.forEach(l => { const us = UFS.map(x => x[0]);
+    const m = mqo(us.map(u => (W[r1][u]["v" + l] - W[r0][u]["v" + l]) / 1000), us.map(u => (W[r1][u]["g" + l] - W[r0][u]["g" + l]) / 1000));
+    modelos.push({ modelo: `(2) Δ votos ${S(l)} · ${rot}`, termo: "Δ investimento (R$ mil)", ...m }); }));
+
+  // 7. Temas
+  const rx = Object.fromEntries(CONFIG.temas.map(t => [t.tema, t.padrao ? new RegExp(t.padrao) : null]));
+  const rxAt = Object.fromEntries(LADOS.map(l => [l, new RegExp(CONFIG.ataques[l])]));
+  ads.forEach(a => { a.temas = CONFIG.temas.filter(t => (rx[t.tema] || rxAt[a.campo]).test(a.texto)).map(t => t.tema); });
+  const pesoCamp = new Map(); pesos.forEach(p => pesoCamp.set(p.ad, (pesoCamp.get(p.ad) || 0) + p.peso));
+  const pesoTema = [...pesos, ...[...pesoCamp.entries()].map(([ad, peso]) => ({ ad, turno: 3, peso }))];
+  const grupos = new Map();
+  pesoTema.forEach(p => { const a = adPor.get(p.ad); const k0 = `${a.ano}|${p.turno}|${a.campo}`;
+    const ts = ["_total", ...(a.texto === "" ? ["_sem_texto"] : a.temas.length ? [] : ["_sem_tema"]), ...a.temas];
+    if (!grupos.has(k0 + "|_total")) ["_total", "_sem_texto", "_sem_tema", ...CONFIG.temas.map(t => t.tema)].forEach(t =>
+      grupos.set(k0 + "|" + t, { ano: a.ano, turno: p.turno, campo: a.campo, tema: t, ads: new Set(), pecas: new Set(), gasto_min: 0, gasto_med: 0, gasto_max: 0 }));
+    ts.forEach(t => { const o = grupos.get(k0 + "|" + t); o.ads.add(a.ad); o.pecas.add(a.criativo); o.gasto_min += a.gmin * p.peso; o.gasto_med += a.gmed * p.peso; o.gasto_max += a.gmax * p.peso; }); });
+  const temas = [...grupos.values()].map(o => ({ ano: o.ano, turno: o.turno, campo: o.campo, tema: o.tema, n_anuncios: o.ads.size, n_pecas: o.pecas.size,
+    gasto_min: o.gasto_min, gasto_med: o.gasto_med, gasto_max: o.gasto_max }));
+
+  const D = {
+    meta: { gerado_em: new Date().toISOString().slice(0, 10),
+      fonte_meta: `Biblioteca de Anúncios da Meta (${CONFIG.meta.map(m => m.arquivo).join(", ")})`,
+      fonte_votos: `TSE, votação por seção (${CONFIG.eleicoes.map(e => e.votos).join(", ")})` },
+    candidatos: CONFIG.eleicoes.flatMap(e => LADOS.map(l => ({ ano: e.ano, campo: l, nome: e.candidatos[l].nome }))),
+    cobertura, uf: ufTab, fora_uf, resumo, segmentacao: [...seg.values()], modelos, votos_total: totais,
+    comparecimento: [...comp.values()], temas_rotulos: CONFIG.temas.map(t => ({ tema: t.tema, rotulo: t.rotulo })), temas
+  };
+  return { D, controle: ctl, avisos };
+}
+
+/* ---------- interface de carregamento ---------- */
+const ARQUIVOS = [
+  ...CONFIG.meta.map(m => ({ nome: m.arquivo, tipo: "meta", uso: "Anúncios · " + CONFIG.lados[m.lado].sigla })),
+  ...CONFIG.eleicoes.flatMap(e => [{ nome: e.votos, tipo: "votos", uso: "Votos · " + e.ano }, { nome: e.perfil, tipo: "perfil", uso: "Quem compareceu · " + e.ano }])
+];
+const tamanho = b => !b ? "—" : b >= 1e9 ? fmtN(b / 1e9, 2) + " GB" : b >= 1e6 ? fmtN(b / 1e6, 1) + " MB" : fmtN(b / 1e3, 0) + " KB";
+let fontes = {};   // nome → {file} ou {url, bytes, mtime}
+
+function msgDados(html, tipo = ""){
+  const m = $("#dados-msg");
+  m.className = "dados-msg " + tipo;
+  m.innerHTML = html;
+}
+function atualizarCarregamento(progresso, texto, indeterminado = false){
+  const bloco = $("#carregamento-geral");
+  bloco.hidden = false;
+  $("#carregamento-texto").textContent = texto;
+  const barra = $("#barra-global");
+  barra.classList.toggle("indeterminada", indeterminado);
+  const valor = Math.round(Math.max(0, Math.min(1, Number(progresso) || 0)) * 100);
+  if (indeterminado) barra.removeAttribute("aria-valuenow");
+  else barra.setAttribute("aria-valuenow", String(valor));
+  $("#barra-global-preenchimento").style.width = `${valor}%`;
+}
+function ocultarCarregamento(){ $("#carregamento-geral").hidden = true; }
+
+// Assinatura dos arquivos + configuração: se nada mudou, usa o resultado guardado neste navegador
+function assinatura(){ return VERSAO_CALCULO + "::" + JSON.stringify(CONFIG) + "::" +
+  ARQUIVOS.map(a => { const f = fontes[a.nome]; return a.nome + ":" + (f.file ? f.file.size + ":" + f.file.lastModified : f.bytes + ":" + f.mtime); }).join("|"); }
+const GUARDA = {
+  abrir(){ return new Promise((ok, erro) => { const r = indexedDB.open("anuncios-meta-voto", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("resultados"); r.onsuccess = () => ok(r.result); r.onerror = () => erro(r.error); }); },
+  async ler(k){ try { const db = await this.abrir(); return await new Promise(ok => { const q = db.transaction("resultados").objectStore("resultados").get(k);
+    q.onsuccess = () => ok(q.result || null); q.onerror = () => ok(null); }); } catch (e) { return null; } },
+  async gravar(k, v){ try { const db = await this.abrir(); const tx = db.transaction("resultados", "readwrite"); const s = tx.objectStore("resultados"); s.clear(); s.put(v, k); } catch (e) {} },
+  async limpar(){ try { const db = await this.abrir(); db.transaction("resultados", "readwrite").objectStore("resultados").clear(); } catch (e) {} }
+};
+
+async function processar(forcar = false){
+  const falta = ARQUIVOS.filter(a => !fontes[a.nome]);
+  if (falta.length) {
+    ocultarCarregamento();
+    msgDados(`Faltam ${falta.length} arquivo(s) na pasta <code>dados</code>: ${falta.map(a => `<code>${a.nome}</code>`).join(", ")}. Confira os nomes e reinicie o servidor local.`, "err");
+    return;
+  }
+  atualizarCarregamento(0, "Preparando os arquivos de dados…", true);
+  const chave = assinatura();
+  if (!forcar) {
+    const g = await GUARDA.ler(chave);
+    if (g) { aplicarDados(g, true); return; }
+  }
+  msgDados("");
+  atualizarCarregamento(0, `Lendo os ${ARQUIVOS.length} arquivos de dados…`);
+  const progresso = Object.fromEntries(ARQUIVOS.map(a => [a.nome, 0]));
+  const proporcaoLida = () => Object.values(progresso).reduce((s, n) => s + n, 0) / ARQUIVOS.length;
+  const t0 = performance.now();
+  const res = {};
+  try {
+    await Promise.all(ARQUIVOS.map(a => {
+      const f = fontes[a.nome];
+      return executar({ tipo: a.tipo, nome: a.nome, file: f.file || null, url: f.url || null }, p => {
+        progresso[a.nome] = Math.max(progresso[a.nome] || 0, p || 0);
+        atualizarCarregamento(0.9 * proporcaoLida(), `Lendo os ${ARQUIVOS.length} arquivos de dados…`);
+      }).then(r => {
+        res[a.nome] = r;
+        progresso[a.nome] = 1;
+        atualizarCarregamento(0.9 * proporcaoLida(), `Lendo os ${ARQUIVOS.length} arquivos de dados…`);
+      });
+    }));
+  } catch (e) {
+    ocultarCarregamento();
+    msgDados(`Não foi possível ler os dados: ${e.message}`, "err");
+    console.error(e);
+    return;
+  }
+  atualizarCarregamento(0.93, "Calculando os resultados…");
+  await new Promise(r => setTimeout(r, 30));
+  let out;
+  try { out = calcular(res); }
+  catch (e) {
+    ocultarCarregamento();
+    msgDados(`Erro no cálculo: ${e.message}`, "err");
+    console.error(e);
+    return;
+  }
+  atualizarCarregamento(0.97, "Preparando os gráficos e a apresentação…");
+  const pacote = { ...out, lido_em: new Date().toISOString(), segundos: Math.round((performance.now() - t0) / 1000),
+    arquivos: ARQUIVOS.map(a => ({ nome: a.nome, bytes: fontes[a.nome].file?.size ?? fontes[a.nome].bytes })) };
+  await GUARDA.gravar(chave, pacote);
+  atualizarCarregamento(1, "Abrindo a apresentação…");
+  aplicarDados(pacote, false);
+}
+
+function aplicarDados(p, guardado){
+  ocultarCarregamento();
+  D = p.D;
+  const quando = new Date(p.lido_em).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+  const origem = guardado === "publicado" ? `resultados publicados em <code>${CONFIG.pasta}${CONFIG.resultados}</code> (calculados em ${quando})`
+    : guardado ? `resultado guardado neste navegador (mesmos arquivos e configuração, lidos em ${quando})` : `lidos agora, em ${p.segundos} s`;
+  $("#exportar").hidden = guardado === "publicado";
+  $("#exportar").onclick = () => { const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ ...p, versao: VERSAO_CALCULO })], { type: "application/json" }));
+    a.download = CONFIG.resultados; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); };
+  msgDados(`<b>✓ ${guardado === "publicado" ? "Resultados" : ARQUIVOS.length + " arquivos"} prontos</b> · ${origem}${p.avisos.length ? ` · <b>${p.avisos.length} aviso(s)</b> no controle dos dados` : ""}`, p.avisos.length ? "warn" : "ok");
+  $("#controle").innerHTML = `<summary>Controle dos dados</summary>
+    ${p.avisos.length ? `<ul class="avisos">${p.avisos.map(a => `<li>${a}</li>`).join("")}</ul>` : ""}
+    <div class="ctl-grid">${p.controle.map(c => `<div class="ctl-card"><b><code>${c.arquivo}</code></b><span>${c.tipo} · ${tamanho(c.bytes)}</span><ul>${c.detalhes.map(d => `<li>${d}</li>`).join("")}</ul></div>`).join("")}</div>
+    <p class="sub">Regras: só entram anúncios cujo “Pago por” contém o texto configurado para cada candidato; investimento = ponto médio da faixa de gasto, rateado por turno (dias de veiculação) e por UF (distribuição das impressões); votos de presidente (CD_CARGO = 1) pelo número do candidato.</p>`;
+  $("#controle").hidden = false;
+  iniciar();
+}
+
+// Tamanho e data de um arquivo servido; usa HEAD e, se o servidor não aceitar, GET interrompido
+async function infoArquivo(url){
+  try { const r = await fetch(url, { method: "HEAD", cache: "no-store" });
+    if (r.ok) return { bytes: +r.headers.get("content-length") || 0, mtime: r.headers.get("last-modified") || "" };
+    if (r.status === 404) return null; } catch (e) {}
+  try { const c = new AbortController(); const r = await fetch(url, { cache: "no-store", signal: c.signal });
+    const out = r.ok ? { bytes: +r.headers.get("content-length") || 0, mtime: r.headers.get("last-modified") || "" } : null; c.abort(); return out; }
+  catch (e) { return null; }
+}
+
+async function carregarResultados(){
+  try { const r = await fetch(new URL(CONFIG.pasta + CONFIG.resultados, location.href).href, { cache: "no-store" });
+    if (!r.ok) return false;
+    const p = await r.json(); if (!p || !p.D) return false;
+    aplicarDados({ avisos: [], controle: [], ...p }, "publicado"); return true; }
+  catch (e) { return false; }
+}
+
+// A pasta dados/ fica ao lado desta página. A leitura é automática via servidor local.
+async function procurarNaPasta(){
+  if (!/^https?:/.test(location.protocol)) return false;
+  atualizarCarregamento(0, "Localizando os arquivos de dados…", true);
+  const achados = {};
+  await Promise.all(ARQUIVOS.map(async a => { const url = new URL(CONFIG.pasta + a.nome, location.href).href;
+    const i = await infoArquivo(url); if (i) achados[a.nome] = { url, ...i }; }));
+  // Sem todos os arquivos originais, usa os resultados já calculados, se houver
+  if (Object.keys(achados).length < ARQUIVOS.length && await carregarResultados()) return true;
+  if (!Object.keys(achados).length) return false;
+  fontes = achados;
+  await processar();
+  return true;
+}
+
+function prepararCarregamento(){
+  document.body.classList.add("aguardando");
+  atualizarCarregamento(0, "Localizando os arquivos de dados…", true);
+  msgDados("");
+  procurarNaPasta().then(ok => {
+    if (ok) return;
+    ocultarCarregamento();
+    if (/^https?:/.test(location.protocol)) {
+      msgDados(`Não encontrei os arquivos em <code>${CONFIG.pasta}</code>. Confira se a pasta <code>dados</code> está no mesmo diretório da apresentação e se os sete nomes de arquivo estão corretos.`, "err");
+    } else {
+      msgDados(`Para carregar os dados automaticamente, abra esta página pelo servidor local: execute <code>python abrir_apresentacao.py</code> no terminal do VS Code. O HTML e a pasta <code>dados</code> precisam estar no mesmo diretório.`, "err");
+    }
+  }).catch(e => {
+    ocultarCarregamento();
+    msgDados(`Não foi possível iniciar o carregamento: ${e.message}. Confira o servidor local e a pasta <code>dados</code>.`, "err");
+    console.error(e);
+  });
+}
+
+const UF_GRID = {RR:[1,0],AP:[3,0],AM:[1,1],PA:[2,1],MA:[3,1],CE:[4,1],RN:[5,1],AC:[0,2],RO:[1,2],TO:[2,2],PI:[3,2],PE:[4,2],PB:[5,2],
+  MT:[1,3],GO:[2,3],BA:[3,3],SE:[4,3],AL:[5,3],MS:[1,4],DF:[2,4],MG:[3,4],ES:[4,4],PR:[1,5],SP:[2,5],RJ:[3,5],SC:[1,6],RS:[1,7]};
+const FAIXAS = ["18-24","25-34","35-44","45-54","55-64","65+"];
+const CAMP = 3;   // período "Campanha": investimento dos dois turnos + votos do turno final
+let COMPS = {};
+// Comparações entre períodos, montadas a partir das eleições configuradas
+function gerarComps(){ const A=anos(); const c={}; if(!A.length) return c; const a0=A[0], a1=A.at(-1);
+  if(A.length>1){ c.camp={ref:[a0,CAMP],alvo:[a1,CAMP],rotulo:`Campanha: ${a0} → ${a1}`,curto:[String(a0),String(a1)]};
+    c.t1_anos={ref:[a0,1],alvo:[a1,1],rotulo:`1º turno: ${a0} → ${a1}`,curto:[String(a0),String(a1)]};
+    c.t2_anos={ref:[a0,2],alvo:[a1,2],rotulo:`2º turno: ${a0} → ${a1}`,curto:[String(a0),String(a1)]}; }
+  [...A].reverse().forEach(a=>{ c["t_"+a]={ref:[a,1],alvo:[a,2],rotulo:`${a}: 1º → 2º turno`,curto:["1º turno","2º turno"]}; });
+  return c; }
+const st = {ano:CONFIG.eleicoes.at(-1).ano, turno:CAMP, faixa:"med", uf:"BR", comp:"camp", tab:"var", sortKey:"uf", sortDir:1};
+let D = null;
+
+const $ = s => document.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const ok = v => v!=null && isFinite(v);
+const fmtN = (v,d=0) => !ok(v) ? "—" : v.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d}).replace("-","−");
+const curto = v => { if(!ok(v)) return "—"; const a=Math.abs(v), s=v<0?"−":""; return s+(a>=1e6 ? fmtN(a/1e6,a>=1e8?0:1)+" mi" : a>=1e3 ? fmtN(a/1e3,0)+" mil" : fmtN(a,0)); };
+const fmtBRL = v => !ok(v) ? "—" : (v<0?"−":"")+"R$ "+curto(Math.abs(v));
+const fmtVot = v => curto(v);
+const fmtBRLfull = v => !ok(v) ? "—" : (v<0?"−":"")+"R$ "+fmtN(Math.abs(v),0);
+const fmtBRLsig = v => !ok(v) ? "—" : (v>0?"+":v<0?"−":"")+"R$ "+fmtN(Math.abs(v),0);
+const fmtSigned = v => !ok(v) ? "—" : (v>0?"+":v<0?"−":"")+fmtN(Math.abs(v),0);
+const fmtPct = (v,d=1) => !ok(v) ? "—" : fmtN(v,d)+"%";
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs={}, parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function txt(parent,x,y,s,attrs={}){ const t=el("text",{x,y,...attrs},parent); t.textContent=s; return t; }
+
+/* ---------- tooltip ---------- */
+const tip = $("#tip");
+function showTip(ev, html){ tip.innerHTML=siglas(html); tip.style.opacity=1; moveTip(ev); }
+function moveTip(ev){ const w=tip.offsetWidth,h=tip.offsetHeight; let x=ev.clientX+14, y=ev.clientY+14;
+  if(x+w>innerWidth-8) x=ev.clientX-w-14; if(y+h>innerHeight-8) y=ev.clientY-h-14; tip.style.left=Math.max(4,x)+"px"; tip.style.top=Math.max(4,y)+"px"; }
+function hideTip(){ tip.style.opacity=0; }
+function bindTip(node, fn){ node.addEventListener("mouseenter",e=>showTip(e,fn())); node.addEventListener("mousemove",moveTip); node.addEventListener("mouseleave",hideTip);
+  node.addEventListener("focus",()=>{const r=node.getBoundingClientRect(); showTip({clientX:r.right,clientY:r.top},fn());}); node.addEventListener("blur",hideTip); }
+const row = (k,v) => `<div class="row"><span>${k}</span><b>${v}</b></div>`;
+
+/* ---------- cores ---------- */
+function hexToRgb(h){ h=h.replace("#",""); if(h.length===3) h=h.split("").map(c=>c+c).join(""); const n=parseInt(h,16); return [n>>16&255,n>>8&255,n&255]; }
+function mix(a,b,t){ const A=hexToRgb(a),B=hexToRgb(b); return "rgb("+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")+")"; }
+function diverging(t){ t=Math.max(-1,Math.min(1,t)); return t<0 ? mix(css("--mid"),css("--pl"),-t) : mix(css("--mid"),css("--pt"),t); }
+function divNeutral(t){ t=Math.max(-1,Math.min(1,t)); return t<0 ? mix(css("--mid"),css("--lo"),-t) : mix(css("--mid"),css("--hi"),t); }
+function sequential(t){ t=Math.max(0,Math.min(1,t)); const s=["--seq-0","--seq-1","--seq-2","--seq-3","--seq-4"].map(css);
+  const i=Math.min(3,Math.floor(t*4)); return mix(s[i],s[i+1],t*4-i); }
+function inkOn(fill){ const m=fill.startsWith("#")?hexToRgb(fill):fill.match(/\d+/g).map(Number); const L=(0.2126*m[0]+0.7152*m[1]+0.0722*m[2])/255; return L>0.55?"#0f1a33":"#ffffff"; }
+// cor de quem ficou à frente; tom pela vantagem (diferença ÷ total)
+function corLider(a,b){ if(!(a+b>0) || a===b) return css("--mid"); const m=Math.abs(a-b)/(a+b); const t=0.3+0.7*Math.min(1,m/0.5); return mix(css("--mid"),css(a>b?"--pt":"--pl"),t); }
+
+/* ---------- dados ---------- */
+// "Lula" ou "Jair → Flávio" quando o candidato do lado muda entre os períodos comparados
+const quem = (l, c) => { const a=nome(l,c.ref[0]), b=nome(l,c.alvo[0]); return a===b ? a : `${a.split(" ")[0]} → ${b.split(" ")[0]}`; };
+const nome = (campo, ano=st.ano) => D.candidatos.find(c=>c.campo===campo&&c.ano==ano)?.nome ?? campo;
+const gk = () => ({min:"gasto_min",med:"gasto_med",max:"gasto_max"}[st.faixa]);
+const anos = () => [...new Set(D.uf.map(r=>r.ano))].sort();
+const temTurno = (ano,t) => t===CAMP ? (temTurno(ano,1)||temTurno(ano,2)) : D.uf.some(r=>r.ano==ano&&r.turno==t&&r.votos>0);
+const turnoFinal = ano => temTurno(ano,2)?2:1;
+const turnosDe = (ano,t) => t===CAMP ? [1,2].filter(x=>temTurno(ano,x)) : [t];
+const turnoVotos = (ano,t) => t===CAMP ? turnoFinal(ano) : t;
+const nomePer = (ano,t) => t===CAMP ? `campanha de ${ano}` : `${t}º turno de ${ano}`;
+const per = () => nomePer(st.ano,st.turno);
+const Per = () => { const s=per(); return s[0].toUpperCase()+s.slice(1); };
+function resumo(ano,t,campo){
+  const rs=turnosDe(ano,t).map(x=>(D.resumo||[]).find(r=>r.ano==ano&&r.turno==x&&r.campo===campo)).filter(Boolean);
+  const out={gasto_min:0,gasto_med:0,gasto_max:0,impr_med:0,n_anuncios:0,n_pecas:0}; rs.forEach(r=>{ for(const k in out) out[k]+=r[k]||0; });
+  if(t===CAMP){ const cv=(D.cobertura||[]).find(x=>x.ano==ano&&x.campo===campo); if(cv){ out.n_anuncios=cv.n; out.n_pecas=cv.pecas??out.n_pecas; } }
+  return out;
+}
+const votosTot = (ano,t,campo) => { const tv=turnoVotos(ano,t); const r=(D.votos_total||[]).find(x=>x.ano==ano&&x.turno==tv&&x.campo===campo);
+  return r? r.votos : D.uf.filter(x=>x.ano==ano&&x.turno==tv&&x.campo===campo).reduce((s,x)=>s+(x.votos||0),0); };
+function linhas(ano=st.ano, t=st.turno){
+  const k=gk(), ts=turnosDe(ano,t), tv=turnoVotos(ano,t); const by={};
+  D.uf.filter(r=>r.ano==ano&&ts.includes(r.turno)).forEach(r=>{ const o=(by[r.uf] ||= {uf:r.uf,nome_uf:r.nome_uf,regiao:r.regiao,gPT:0,gPL:0,vPT:0,vPL:0,n:0});
+    o["g"+r.campo]+=r[k]||0; if(r.turno===tv) o["v"+r.campo]=r.votos||0; o.n++; });
+  const out=Object.values(by).filter(o=>o.n>=2);
+  out.forEach(o=>{ o.vTot=o.vPT+o.vPL; o.difG=o.gPT-o.gPL; o.difV=o.vPT-o.vPL; o.rel = Math.sign(o.difG)===Math.sign(o.difV) ? "Positiva" : "Negativa"; });
+  return out;
+}
+function variacao(){
+  const c=COMPS[st.comp]; if(!c) return []; const A=linhas(...c.ref), B=linhas(...c.alvo); const by={}; A.forEach(o=>by[o.uf]=o);
+  return B.filter(o=>by[o.uf]).map(o=>{ const a=by[o.uf]; const r={uf:o.uf,nome_uf:o.nome_uf,regiao:o.regiao,a,b:o};
+    ["PT","PL"].forEach(p=>{ r["dG"+p]=o["g"+p]-a["g"+p]; r["dV"+p]=o["v"+p]-a["v"+p]; r["rel"+p]=Math.sign(r["dG"+p])===Math.sign(r["dV"+p])?"Positiva":"Negativa"; });
+    return r; });
+}
+function rank(a){ const idx=a.map((v,i)=>[v,i]).sort((x,y)=>x[0]-y[0]); const r=Array(a.length); let i=0;
+  while(i<idx.length){ let j=i; while(j+1<idx.length && idx[j+1][0]===idx[i][0]) j++; const m=(i+j)/2+1; for(let k=i;k<=j;k++) r[idx[k][1]]=m; i=j+1; } return r; }
+function pearson(x,y){ const n=x.length; if(n<3) return NaN; const mx=x.reduce((a,b)=>a+b)/n, my=y.reduce((a,b)=>a+b)/n; let sxy=0,sxx=0,syy=0;
+  for(let i=0;i<n;i++){ sxy+=(x[i]-mx)*(y[i]-my); sxx+=(x[i]-mx)**2; syy+=(y[i]-my)**2; } return (sxx>1e-12&&syy>1e-12)? sxy/Math.sqrt(sxx*syy) : NaN; }
+const spearman=(x,y)=>pearson(rank(x),rank(y));
+
+/* escala de raiz quadrada com sinal (estados pequenos e grandes no mesmo gráfico) */
+const sq = v => Math.sign(v)*Math.sqrt(Math.abs(v));
+function nice(v){ if(v<=0) return 0; const m=10**Math.floor(Math.log10(v)), f=v/m; return (f>=5?5:f>=2?2:1)*m; }
+function sqTicks(lo,hi){ const t=new Set([0]); const tot=Math.sqrt(Math.max(0,hi))+Math.sqrt(Math.max(0,-lo));
+  [[hi,1],[-lo,-1]].forEach(([M,s])=>{ if(M<=0 || Math.sqrt(M)/tot<0.18) return; [0.12,0.45,1].forEach(f=>{ const v=nice(M*f); if(v>0&&v<=M*1.02) t.add(s*v); }); }); return [...t].sort((a,b)=>a-b); }
+
+/* ---------- controles ---------- */
+function segmented(id, opts, key){ const box=$(id); box.innerHTML="";
+  opts.forEach(([v,label,dis])=>{ const b=document.createElement("button"); b.type="button"; b.textContent=label; b.setAttribute("aria-pressed", String(st[key]==v)); if(dis) b.disabled=true;
+    b.onclick=()=>{ st[key]=v; if(key==="ano" && !temTurno(st.ano,st.turno)) st.turno=CAMP; renderAll(); }; box.appendChild(b); }); }
+function compOpts(){ const valid=Object.entries(COMPS).filter(([k,c])=>temTurno(...c.ref)&&temTurno(...c.alvo));
+  if(!valid.some(([k])=>k===st.comp)) st.comp=valid[0]?.[0];
+  ["#f-comp","#f-comp2"].forEach(sel=>{ const box=$(sel); box.innerHTML=valid.map(([k,c])=>`<option value="${k}">${c.rotulo}</option>`).join(""); box.value=st.comp;
+    box.onchange=e=>{ st.comp=e.target.value; $("#f-comp").value=$("#f-comp2").value=st.comp; renderCompare(); renderTabela(linhas()); }; }); }
+function setupControls(){
+  segmented("#f-ano", anos().map(a=>[a,String(a)]), "ano");
+  segmented("#f-turno", [[1,"1º turno",!temTurno(st.ano,1)],[2,"2º turno",!temTurno(st.ano,2)],[CAMP,"Campanha"]], "turno");
+  segmented("#f-faixa", [["min","Mín."],["med","Médio"],["max","Máx."]], "faixa");
+  segmented("#f-tab", [["var","Variação de investimento e votos"],["dif","PT × PL no período escolhido"]], "tab");
+  compOpts();
+  const ufs=[...new Set(D.segmentacao.map(r=>r.uf))].sort((a,b)=>a==="BR"?-1:b==="BR"?1:a.localeCompare(b));
+  const nm={}; D.uf.forEach(r=>nm[r.uf]=r.nome_uf); if(!ufs.includes(st.uf)) st.uf="BR";
+  $("#f-uf2").innerHTML=ufs.map(u=>`<option value="${u}">${u==="BR"?"Brasil":u+" · "+(nm[u]||u)}</option>`).join("");
+  $("#f-uf2").value=st.uf; $("#f-uf2").onchange=e=>{ st.uf=e.target.value; renderQuemVotou(); };
+}
+
+/* ---------- capa ---------- */
+function renderCover(){
+  const k=gk(); const gPT=resumo(st.ano,st.turno,"PT")[k], gPL=resumo(st.ano,st.turno,"PL")[k], vPT=votosTot(st.ano,st.turno,"PT"), vPL=votosTot(st.ano,st.turno,"PL");
+  const card=(k,v,s)=>`<div class="cstat"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  const vs=st.turno===CAMP?`turno final de ${st.ano}`:per();
+  $("#cover-stats").innerHTML = card("Investimento · PT",fmtBRL(gPT),`${nome("PT")} · ${per()}`)+card("Investimento · PL",fmtBRL(gPL),`${nome("PL")} · ${per()}`)
+    + card("Votos · PT",fmtVot(vPT),`${nome("PT")} · ${vs}`)+card("Votos · PL",fmtVot(vPL),`${nome("PL")} · ${vs}`);
+}
+
+/* ---------- 04 visão geral ---------- */
+function versus(boxId, vals, fmt){
+  const max=Math.max(...vals.map(v=>v.v),1);
+  $(boxId).innerHTML=vals.map(v=>{ const w=Math.max(.6,100*v.v/max); const inside=w>42;
+    return `<div class="vs-row"><div class="vs-name"><b>${v.nome}</b><span>${v.campo}${v.extra?" · "+v.extra:""}</span></div>
+      <div class="vs-bar"><i style="width:${w}%;background:var(--${v.campo.toLowerCase()})"></i><span class="val" style="${inside?`left:12px;color:#fff`:`left:calc(${w}% + 10px);color:var(--ink)`}">${fmt(v.v)}</span></div></div>`; }).join("");
+}
+function renderOverview(L){
+  const k=gk(); const g={PT:resumo(st.ano,st.turno,"PT")[k],PL:resumo(st.ano,st.turno,"PL")[k]}; const v={PT:votosTot(st.ano,st.turno,"PT"),PL:votosTot(st.ano,st.turno,"PL")};
+  const rPT=resumo(st.ano,st.turno,"PT"), rPL=resumo(st.ano,st.turno,"PL"); const n={PT:rPT,PL:rPL};
+  versus("#vs-gasto",["PT","PL"].map(c=>({campo:c,nome:nome(c),v:g[c],extra:`${fmtN(n[c].n_anuncios)} anúncios · ${fmtN(n[c].n_pecas)} peças`})),fmtBRL);
+  versus("#vs-votos",["PT","PL"].map(c=>({campo:c,nome:nome(c),v:v[c],extra:fmtPct(100*v[c]/(v.PT+v.PL))+" dos dois"})),fmtVot);
+  const wg=g.PT>=g.PL?"PT":"PL", wv=v.PT>=v.PL?"PT":"PL", lg=wg==="PT"?"PL":"PT"; const ratio=g[lg]>0? g[wg]/g[lg] : null;
+  const rt=ratio?` (${fmtN(ratio,1)} vezes o valor de ${nome(lg)})`:"";
+  $("#h1").textContent = wg===wv ? `${nome(wg)} investiu mais${rt} e recebeu mais votos` : `${nome(wg)} investiu mais${rt}; ${nome(wv)} recebeu mais votos`;
+  $("#d1").textContent = `${Per()}. ${wg===wv?"Quem mais investiu em anúncios pagos também recebeu mais votos.":"Quem mais investiu em anúncios pagos não foi quem recebeu mais votos."} Por estado, ${nome("PT")} investiu mais em ${L.filter(o=>o.gPT>o.gPL).length} e teve mais votos em ${L.filter(o=>o.vPT>o.vPL).length} das 27 UFs.`;
+  const ts=[1,2].filter(t=>temTurno(st.ano,t)); const on=t=>t===st.turno?"on":"";
+  const ap=r=>`${fmtN(r.n_anuncios)} <span style="color:var(--ink-3)">(${fmtN(r.n_pecas)})</span>`;
+  const linhaG=(t,lab)=>{ const a=resumo(st.ano,t,"PT"), b=resumo(st.ano,t,"PL"); return `<tr class="${on(t)}"><td>${lab}</td><td>${fmtBRLfull(a[k])}</td><td>${fmtBRLfull(b[k])}</td><td>${ap(a)}</td><td>${ap(b)}</td></tr>`; };
+  $("#mini-gasto").innerHTML=`<thead><tr><th>${st.ano}</th><th>Invest. PT</th><th>Invest. PL</th><th>Anúncios PT (peças)</th><th>Anúncios PL (peças)</th></tr></thead><tbody>${ts.map(t=>linhaG(t,t+"º turno")).join("")}${linhaG(CAMP,"<b>Campanha</b>")}</tbody>`;
+  $("#mini-votos").innerHTML=`<thead><tr><th>${st.ano}</th><th>Votos PT</th><th>Votos PL</th><th>% PT</th><th>PT − PL</th></tr></thead><tbody>${ts.map(t=>{ const a=votosTot(st.ano,t,"PT"), b=votosTot(st.ano,t,"PL");
+    return `<tr class="${on(t)||(st.turno===CAMP&&t===turnoFinal(st.ano)?"on":"")}"><td>${t}º turno</td><td>${fmtN(a)}</td><td>${fmtN(b)}</td><td>${fmtPct(100*a/(a+b))}</td><td>${fmtSigned(a-b)}</td></tr>`; }).join("")}</tbody>`;
+}
+
+/* ---------- 05 2022 × 2026 ---------- */
+function renderAnos(){
+  const A=anos(); if(A.length<2){ $("#s2").hidden=true; return; } const [a0,a1]=[A[0],A[A.length-1]]; const k=gk();
+  $("#k-anos").textContent=`${a0} × ${a1} · números gerais da campanha`; $("#f-anos").textContent=`Variação = ${a1} em relação a ${a0}`;
+  const met={gasto:c=>a=>resumo(a,CAMP,c)[k], ads:c=>a=>resumo(a,CAMP,c).n_anuncios, votos:c=>a=>votosTot(a,CAMP,c)};
+  const fm={gasto:fmtBRL, ads:v=>fmtN(v), votos:fmtVot};
+  const pecas=(c,a)=>resumo(a,CAMP,c).n_pecas;
+  const grow=(x0,x1)=> x0>0 ? (x1/x0>=2 ? `${fmtN(x1/x0,1)}×` : `${x1>=x0?"+":"−"}${fmtN(Math.abs(100*(x1/x0-1)),0)}%`) : "novo";
+  const res={};
+  Object.keys(met).forEach(m=>{
+    const vals=[]; ["PT","PL"].forEach(c=>[a0,a1].forEach(a=>vals.push({c,a,v:met[m](c)(a)}))); const max=Math.max(1,...vals.map(x=>x.v));
+    $("#yr-"+m).innerHTML=vals.map(x=>{ const w=Math.max(.6,100*x.v/max), inside=w>45;
+      return `<div class="yr-row"><div class="yr-lab"><b>${x.c} · ${x.a}</b>${nome(x.c,x.a)}</div><div class="yr-bar"><i style="width:${w}%;background:var(--${x.c.toLowerCase()});opacity:${x.a===a0?.5:1}"></i><span class="val" style="${inside?"left:10px;color:#fff":`left:calc(${w}% + 8px);color:var(--ink)`}">${fm[m](x.v)}${m==="ads"?` <span style="font-weight:500;opacity:.8">· ${fmtN(pecas(x.c,x.a))} peças</span>`:""}</span></div></div>`; }).join("");
+    res[m]={}; $("#gr-"+m).innerHTML=["PT","PL"].map(c=>{ const g=grow(met[m](c)(a0),met[m](c)(a1)); res[m][c]=g; return `<span>${c}: <b>${g}</b></span>`; }).join("")
+      + (m==="ads" ? ["PT","PL"].map(c=>`<span>Anúncios por peça ${c}: <b>${fmtN(met.ads(c)(a0)/pecas(c,a0),1)} → ${fmtN(met.ads(c)(a1)/pecas(c,a1),1)}</b></span>`).join("") : "");
+  });
+  $("#h2").textContent=`De ${a0} para ${a1}, o investimento na Meta variou ${res.gasto.PT} no PT e ${res.gasto.PL} no PL; os votos, ${res.votos.PT} e ${res.votos.PL}`;
+}
+
+/* ---------- 06 mapas ---------- */
+function tileMap(boxId, L, kPT, kPL, fmt, label, tipFn){
+  const S=52, G=4, W=6*S+30, H=8*S+8; const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":label}); const by={}; L.forEach(o=>by[o.uf]=o);
+  Object.entries(UF_GRID).forEach(([uf,[c,r]])=>{
+    const o=by[uf]; const a=o?o[kPT]:0, b=o?o[kPL]:0; const fill=o?corLider(a,b):css("--surface-2"); const ink=inkOn(fill);
+    const lider=a>b?"PT":b>a?"PL":"—"; const g=el("g",{tabindex:0,role:"img","aria-label":`${uf}: ${lider} à frente, ${fmt(Math.max(a,b))}`},svg); const x=15+c*S, y=4+r*S;
+    el("rect",{x:x+G/2,y:y+G/2,width:S-G,height:S-G,rx:5,fill},g);
+    txt(g,x+S/2,y+S/2-2,uf,{class:"tile-label","text-anchor":"middle",style:`fill:${ink}`});
+    txt(g,x+S/2,y+S/2+12,o&&(a||b)?curto(Math.max(a,b)):"—",{class:"tile-val","text-anchor":"middle",style:`fill:${ink}`});
+    if(o) bindTip(g,()=>tipFn(o));
+  });
+  const box=$(boxId); box.innerHTML=""; box.appendChild(svg);
+}
+function renderMaps(L){
+  tileMap("#map-gasto",L,"gPT","gPL",fmtBRL,"Quem investiu mais por UF",o=>`<b>${o.nome_uf}</b>${row("Investimento "+nome("PT"),fmtBRLfull(o.gPT))}${row("Investimento "+nome("PL"),fmtBRLfull(o.gPL))}${row("Diferença PT − PL",fmtBRLsig(o.difG))}`);
+  tileMap("#map-voto",L,"vPT","vPL",fmtVot,"Quem teve mais votos por UF",o=>`<b>${o.nome_uf}</b>${row("Votos "+nome("PT"),fmtN(o.vPT))}${row("Votos "+nome("PL"),fmtN(o.vPL))}${row("Diferença PT − PL",fmtSigned(o.difV))}`);
+  const gPT=L.filter(o=>o.gPT>o.gPL).length, vPT=L.filter(o=>o.vPT>o.vPL).length, conc=L.filter(o=>o.rel==="Positiva").length;
+  $("#m1-t").innerHTML=`Investimento (R$) · ${per()}<div class="sub" style="font-weight:400;margin-top:2px">${nome("PT")} à frente em ${gPT} UFs · ${nome("PL")} em ${L.length-gPT}</div>`;
+  $("#m2-t").innerHTML=`Votos · ${st.turno===CAMP?"turno final de "+st.ano:per()}<div class="sub" style="font-weight:400;margin-top:2px">${nome("PT")} à frente em ${vPT} UFs · ${nome("PL")} em ${L.length-vPT}</div>`;
+  const ramp=c=>`linear-gradient(90deg,${[0.3,0.65,1].map(t=>mix(css("--mid"),css(c),t)).join(",")})`;
+  $("#map-legend").innerHTML=`<span><span class="ramp" style="width:64px;margin:0 6px 0 0;background:${ramp("--pt")}"></span>PT à frente</span><span><span class="ramp" style="width:64px;margin:0 6px 0 0;background:${ramp("--pl")}"></span>PL à frente</span><span>tom mais forte = vantagem maior</span>`;
+  $("#h3").textContent = `Em ${conc} das 27 UFs, quem mais investiu também teve mais votos`;
+}
+
+/* ---------- 07/08 borboletas ---------- */
+function butterfly(boxId, L, kPT, kPL, fmt, label, tipFn){
+  const box=$(boxId); box.innerHTML=""; const rows=[...L].sort((a,b)=>(b[kPT]+b[kPL])-(a[kPT]+a[kPL]));
+  const RH=21, W=900, mid=W/2, lab=38, H=rows.length*RH+34, half=mid-lab/2-78; const vmax=Math.max(1,...rows.map(o=>Math.max(o[kPT],o[kPL])));
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":label});
+  txt(svg,mid-lab/2-6,14,nome("PT")+" (PT)",{"text-anchor":"end","font-size":13,"font-weight":700,style:"fill:var(--pt)"});
+  txt(svg,mid+lab/2+6,14,nome("PL")+" (PL)",{"font-size":13,"font-weight":700,style:"fill:var(--pl)"});
+  rows.forEach((o,i)=>{ const y=26+i*RH; const g=el("g",{tabindex:0},svg); const a=o[kPT], b=o[kPL];
+    const wa=half*a/vmax, wb=half*b/vmax; const win=a>b?"PT":b>a?"PL":null;
+    el("rect",{x:mid-lab/2-wa,y:y+3,width:Math.max(wa,1),height:RH-7,rx:3,fill:css("--pt"),"fill-opacity":win==="PT"?1:.4},g);
+    el("rect",{x:mid+lab/2,y:y+3,width:Math.max(wb,1),height:RH-7,rx:3,fill:css("--pl"),"fill-opacity":win==="PL"?1:.4},g);
+    txt(g,mid,y+RH/2+3,o.uf,{"text-anchor":"middle","font-size":11,"font-family":"var(--f-mono)","font-weight":600,style:"fill:var(--ink)"});
+    txt(g,mid-lab/2-wa-6,y+RH/2+3,fmt(a),{"text-anchor":"end","font-size":10.5,"font-family":"var(--f-mono)",style:win==="PT"?"fill:var(--ink);font-weight:600":""});
+    txt(g,mid+lab/2+wb+6,y+RH/2+3,fmt(b),{"font-size":10.5,"font-family":"var(--f-mono)",style:win==="PL"?"fill:var(--ink);font-weight:600":""});
+    el("rect",{x:0,y,width:W,height:RH,fill:"transparent"},g); bindTip(g,()=>tipFn(o)); });
+  box.appendChild(svg);
+}
+function renderButterflies(L){
+  butterfly("#bf-gasto",L,"gPT","gPL",fmtBRL,"Investimento por UF",o=>`<b>${o.nome_uf}</b>${row(nome("PT"),fmtBRLfull(o.gPT))}${row(nome("PL"),fmtBRLfull(o.gPL))}${row("Diferença PT − PL",fmtBRLsig(o.difG))}`);
+  butterfly("#bf-votos",L,"vPT","vPL",fmtVot,"Votos por UF",o=>`<b>${o.nome_uf}</b>${row(nome("PT"),fmtN(o.vPT))}${row(nome("PL"),fmtN(o.vPL))}${row("Diferença PT − PL",fmtSigned(o.difV))}`);
+  const g=L.filter(o=>o.gPT>o.gPL).length, v=L.filter(o=>o.vPT>o.vPL).length;
+  $("#h4").textContent = g>=L.length-g ? `${nome("PT")} investiu mais que ${nome("PL")} em ${g} das 27 UFs · ${per()}` : `${nome("PL")} investiu mais que ${nome("PT")} em ${L.length-g} das 27 UFs · ${per()}`;
+  $("#h5").textContent = v>=L.length-v ? `${nome("PT")} teve mais votos que ${nome("PL")} em ${v} das 27 UFs · ${st.turno===CAMP?"turno final de "+st.ano:per()}` : `${nome("PL")} teve mais votos que ${nome("PT")} em ${L.length-v} das 27 UFs · ${st.turno===CAMP?"turno final de "+st.ano:per()}`;
+}
+
+/* ---------- gráfico de quadrantes (09 e 10) ---------- */
+function quadPlot(box, pts, o){
+  // pts: [{x,y,uf,fill,stroke,tip}] ; o: {xlab,ylab,fx,fy,q:{tr,bl,tl,br},W,H}
+  box.innerHTML=""; const W=o.W||760,H=o.H||440,m={l:70,r:18,t:16,b:46};
+  const xs=pts.map(p=>sq(p.x)), ys=pts.map(p=>sq(p.y));
+  const pad=(lo,hi)=>{ const s=(Math.max(0,hi)-Math.min(0,lo))||1; return [Math.min(0,lo)-s*.07, Math.max(0,hi)+s*.12]; };
+  const [xa,xb]=pad(Math.min(...xs),Math.max(...xs)), [ya,yb]=pad(Math.min(...ys),Math.max(...ys));
+  const X=v=>m.l+(sq(v)-xa)/(xb-xa)*(W-m.l-m.r), Y=v=>H-m.b-(sq(v)-ya)/(yb-ya)*(H-m.t-m.b);
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":o.label});
+  const x0=X(0), y0=Y(0);
+  // quadrantes de relação positiva sombreados
+  el("rect",{x:x0,y:m.t,width:W-m.r-x0,height:y0-m.t,fill:css("--pos-bg"),opacity:.6},svg);
+  el("rect",{x:m.l,y:y0,width:x0-m.l,height:H-m.b-y0,fill:css("--pos-bg"),opacity:.6},svg);
+  const inv=v=>Math.sign(v)*v*v;
+  const espaco=(ts,pos,min)=>{ const out=[]; ts.forEach(t=>{ if(t===0 || out.every(u=>Math.abs(pos(u)-pos(t))>=min && (u!==0 || Math.abs(pos(t)-pos(0))>=min))) out.push(t); }); return out; };
+  espaco([0,...sqTicks(inv(xa),inv(xb)).filter(t=>t!==0)],X,58).forEach(t=>{ el("line",{x1:X(t),x2:X(t),y1:m.t,y2:H-m.b,class:"gridline"},svg); txt(svg,X(t),H-m.b+17,o.fx(t),{"text-anchor":"middle","font-size":10.5}); });
+  espaco([0,...sqTicks(inv(ya),inv(yb)).filter(t=>t!==0)],Y,18).forEach(t=>{ el("line",{x1:m.l,x2:W-m.r,y1:Y(t),y2:Y(t),class:"gridline"},svg); txt(svg,m.l-8,Y(t)+4,o.fy(t),{"text-anchor":"end","font-size":10.5}); });
+  el("line",{x1:x0,x2:x0,y1:m.t,y2:H-m.b,stroke:css("--ink-3")},svg); el("line",{x1:m.l,x2:W-m.r,y1:y0,y2:y0,stroke:css("--ink-3")},svg);
+  const q=o.q; const ql=(x,y,s,anc)=>txt(svg,x,y,s,{class:"qlab","text-anchor":anc,style:"fill:var(--ink-3)"});
+  ql(W-m.r-6,m.t+14,q.tr,"end"); ql(m.l+6,H-m.b-8,q.bl,"start"); ql(m.l+6,m.t+14,q.tl,"start"); ql(W-m.r-6,H-m.b-8,q.br,"end");
+  txt(svg,(m.l+W-m.r)/2,H-6,o.xlab,{"text-anchor":"middle","font-size":12,"font-weight":600});
+  txt(svg,0,0,o.ylab,{"text-anchor":"middle","font-size":12,"font-weight":600,transform:`translate(15 ${(m.t+H-m.b)/2}) rotate(-90)`});
+  // rótulos sem sobreposição: testa posições ao redor do ponto e fica com a de menor conflito
+  const P=pts.map(p=>({p,cx:X(p.x),cy:Y(p.y)})), caixas=[], lw=13, lh=10;
+  const sobre=(a,b)=>Math.max(0,Math.min(a.x2,b.x2)-Math.max(a.x1,b.x1))*Math.max(0,Math.min(a.y2,b.y2)-Math.max(a.y1,b.y1));
+  const pos=[[9,4,"start"],[-9,4,"end"],[0,-10,"middle"],[0,17,"middle"],[8,-6,"start"],[8,14,"start"],[-8,-6,"end"],[-8,14,"end"]];
+  P.forEach(a=>{ let best=null, bc=Infinity;
+    pos.forEach(([dx,dy,anc],k)=>{ const x1=anc==="start"?a.cx+dx:anc==="end"?a.cx+dx-lw:a.cx-lw/2, y1=a.cy+dy-lh+1, bx={x1,x2:x1+lw,y1,y2:y1+lh};
+      let c=k*0.5; if(bx.x1<m.l||bx.x2>W-m.r||bx.y1<m.t||bx.y2>H-m.b) c+=500;
+      caixas.forEach(b=>c+=sobre(bx,b)*4); P.forEach(q=>{ if(q!==a) c+=sobre(bx,{x1:q.cx-6,x2:q.cx+6,y1:q.cy-6,y2:q.cy+6})*3; });
+      if(c<bc){ bc=c; best={dx,dy,anc,bx}; } });
+    caixas.push(best.bx); a.l=best; });
+  P.forEach(({p,cx,cy,l})=>{ const g=el("g",{tabindex:0},svg);
+    el("circle",{cx,cy,r:6,fill:p.fill,stroke:p.stroke,"stroke-width":2},g);
+    txt(g,cx+l.dx,cy+l.dy,p.uf,{"font-size":10,"font-family":"var(--f-mono)","text-anchor":l.anc}); el("circle",{cx,cy,r:12,fill:"transparent"},g);
+    bindTip(g,()=>p.tip); });
+  box.appendChild(svg);
+}
+
+/* ---------- 09 investimento × voto ---------- */
+function renderScatter(L){
+  const pts=L.map(o=>{ const c=o.vPT>o.vPL?css("--pt"):css("--pl"); const pos=o.rel==="Positiva";
+    return {x:o.difG,y:o.difV,uf:o.uf,fill:pos?c:css("--surface"),stroke:c,
+      tip:`<b>${o.nome_uf}</b>${row("Investimento PT − PL",fmtBRLsig(o.difG))}${row("Votos PT − PL",fmtSigned(o.difV))}${row("Relação",o.rel)}`}; });
+  quadPlot($("#scatter"),pts,{W:900,H:470,label:"Diferença de investimento e de votos por UF",
+    xlab:`Investimento: ${nome("PT")} − ${nome("PL")} (R$)`, ylab:`Votos: ${nome("PT")} − ${nome("PL")}`,
+    fx:v=>v===0?"0":(v>0?"+":"")+fmtBRL(v), fy:v=>v===0?"0":(v>0?"+":"")+curto(v),
+    q:{tr:"PT investiu mais e teve mais votos", bl:"PL investiu mais e teve mais votos", tl:"PL investiu mais, PT teve mais votos", br:"PT investiu mais, PL teve mais votos"}});
+  { const b=$("#scatter"); b.scrollLeft=(b.scrollWidth-b.clientWidth)/2; }
+  const pos=L.filter(o=>o.rel==="Positiva").length, rho=spearman(L.map(o=>o.difG),L.map(o=>o.difV));
+  $("#h6").textContent=`${Per()}: em ${pos} das 27 UFs, quem investiu mais teve mais votos`;
+  $("#sc-legend").innerHTML=`<span><span class="sw" style="background:var(--pt)"></span>${nome("PT")} teve mais votos</span><span><span class="sw" style="background:var(--pl)"></span>${nome("PL")} teve mais votos</span><span>ponto cheio: relação positiva · vazio: negativa</span><span>ρ de Spearman ${fmtN(rho,2)}</span>`;
+}
+
+/* ---------- 10 variação ---------- */
+function renderCompare(){
+  const c=COMPS[st.comp]; if(!c) return; const V=variacao(); const [r0,r1]=c.curto;
+  $("#dl-PT-t").textContent=`PT (${quem("PT",c)}) · ${c.rotulo}`;
+  $("#dl-PL-t").textContent=`PL (${quem("PL",c)}) · ${c.rotulo}`;
+  if(!V.length){ ["#delta-PT","#delta-PL"].forEach(id=>$(id).innerHTML=`<p class="sub">Sem dados para esta comparação.</p>`); return; }
+  const cnt={};
+  ["PT","PL"].forEach(p=>{ const col=css("--"+p.toLowerCase());
+    const pts=V.map(r=>({x:r["dG"+p],y:r["dV"+p],uf:r.uf,fill:r["rel"+p]==="Positiva"?col:css("--surface"),stroke:col,
+      tip:`<b>${r.nome_uf} · ${p}</b>${row("Investimento "+r0,fmtBRLfull(r.a["g"+p]))}${row("Investimento "+r1,fmtBRLfull(r.b["g"+p]))}${row("Δ investimento",fmtBRLsig(r["dG"+p]))}${row("Votos "+r0,fmtN(r.a["v"+p]))}${row("Votos "+r1,fmtN(r.b["v"+p]))}${row("Δ votos",fmtSigned(r["dV"+p]))}`}));
+    quadPlot($("#delta-"+p),pts,{W:560,H:420,label:"Variação de investimento e de votos · "+p,xlab:"Δ investimento (R$)",ylab:"Δ votos",
+      fx:v=>v===0?"0":(v>0?"+":"")+fmtBRL(v), fy:v=>v===0?"0":(v>0?"+":"")+curto(v),
+      q:{tr:"Investiu mais, voto subiu",bl:"Investiu menos, voto caiu",tl:"Investiu menos, voto subiu",br:"Investiu mais, voto caiu"}});
+    cnt[p]=V.filter(r=>r["rel"+p]==="Positiva").length;
+    $("#ds-"+p).innerHTML=`Investimento e votos andaram juntos em <b>${cnt[p]}</b> das 27 UFs · ρ de Spearman ${fmtN(spearman(V.map(r=>r["dG"+p]),V.map(r=>r["dV"+p])),2)}`; });
+  $("#h7").textContent=`${c.rotulo}: investimento e votos subiram ou caíram juntos em ${cnt.PT} UFs para o PT e em ${cnt.PL} para o PL`;
+}
+
+/* ---------- perfil das impressões (auxiliar) ---------- */
+function distr(campo){
+  const ts=turnosDe(st.ano,st.turno); const m={}; let tot=0;
+  D.segmentacao.filter(r=>r.ano==st.ano&&ts.includes(r.turno)&&r.campo===campo&&r.uf===st.uf&&FAIXAS.includes(r.faixa)&&["female","male"].includes(r.genero))
+    .forEach(r=>{ const k=r.faixa+"|"+r.genero; m[k]=(m[k]||0)+r.impr; tot+=r.impr; });
+  if(!(tot>0)) return null; for(const k in m) m[k]=100*m[k]/tot; return m;
+}
+function heat(boxId, cell, scale, fmtv, label, tipFn){
+  const box=$(boxId); box.innerHTML="";
+  const W=400,H=122,m={l:70,t:4,b:24},cw=(W-m.l-2)/FAIXAS.length,ch=(H-m.t-m.b)/2;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":label});
+  ["female","male"].forEach((gn,gi)=>{ txt(svg,m.l-8,m.t+gi*ch+ch/2+4,gn==="female"?"Mulheres":"Homens",{"text-anchor":"end","font-size":11.5});
+    FAIXAS.forEach((f,fi)=>{ const v=cell(f,gn); const fill=ok(v)?scale(v):css("--surface-2"); const x=m.l+fi*cw, y=m.t+gi*ch; const g=el("g",{tabindex:0},svg);
+      el("rect",{x:x+1.5,y:y+1.5,width:cw-3,height:ch-3,rx:4,fill},g);
+      txt(g,x+cw/2,y+ch/2+4,fmtv(v),{"text-anchor":"middle","font-size":11.5,"font-family":"var(--f-mono)",style:`fill:${inkOn(fill)}`});
+      bindTip(g,()=>tipFn(f,gn,v)); }); });
+  FAIXAS.forEach((f,fi)=>txt(svg,m.l+fi*cw+cw/2,H-6,f,{"text-anchor":"middle","font-size":10.5,"font-family":"var(--f-mono)"}));
+  box.appendChild(svg);
+}
+const gl = gn => gn==="female"?"Mulheres":"Homens";
+/* ---------- 02/03 achados citados na revisão de literatura ---------- */
+// Preenche os números dos achados (campanha inteira, faixa de gasto do seletor); sem dados, fica só o texto
+function renderLit(){
+  const k=gk(), set=(id,t)=>document.querySelectorAll(`[data-lit="${id}"]`).forEach(n=>n.textContent=t);
+  const at=(a,c)=>{ const R=(D.temas||[]).filter(r=>r.ano==a&&r.turno==CAMP&&r.campo===c); const t=R.find(r=>r.tema==="_total"), x=R.find(r=>r.tema==="ataques");
+    return t&&t[k]>0 ? {g:x?x[k]:0, p:x?100*x[k]/t[k]:0} : null; };
+  const g=(a,c)=>resumo(a,CAMP,c)[k];
+  [2022,2026].forEach(a=>{ if(!anos().includes(a)) return;
+    set("gasto"+a,` (${nome("PL",a)}: ${fmtBRL(g(a,"PL"))}; ${nome("PT",a)}: ${fmtBRL(g(a,"PT"))})`);
+    const pt=at(a,"PT"), pl=at(a,"PL"); if(!pt||!pl) return;
+    const [inc,des]=a===2022?[pl,pt]:[pt,pl], [nInc,nDes]=a===2022?[nome("PL",a),nome("PT",a)]:[nome("PT",a),nome("PL",a)];
+    set("pct"+a,` (${fmtPct(inc.p,0)} do investimento, contra ${fmtPct(des.p,0)} de ${nDes})`);
+    const rel=a===2022 ? (des.g>0?`${fmtN(inc.g/des.g,1)} vezes`:"") : `diferença de ${fmtBRL(inc.g-des.g)}`;
+    set("gasto_at"+a,` (${nInc}: ${fmtBRL(inc.g)}; ${nDes}: ${fmtBRL(des.g)}${rel?"; "+rel:""})`); });
+  const p=(a,c)=>{ const x=at(a,c); return x?`${nome(c,a)} ${fmtPct(x.p,0)}`:null; };
+  const partes=anos().filter(a=>a===2022||a===2026).map(a=>{ const l=["PT","PL"].map(c=>p(a,c)).filter(Boolean); return l.length?`${a}: ${l.join(", ")}`:null; }).filter(Boolean);
+  set("ataques", partes.length?`: parcela do investimento em anúncios com ataques aos adversários, ${partes.join("; ")}`:"");
+}
+
+/* ---------- 12 quem votou ---------- */
+function renderQuemVotou(){
+  const body=$("#comp-body"); const pedido=turnoVotos(st.ano,st.turno);
+  const sel=t=>(D.comparecimento||[]).filter(r=>r.ano==st.ano&&r.turno==t&&r.uf===st.uf&&FAIXAS.includes(r.faixa)&&["female","male"].includes(r.genero));
+  // se o perfil do turno pedido ainda não foi publicado pelo TSE, usa o turno disponível
+  const tv=[pedido,2,1].find(t=>sel(t).length) ?? pedido; const C=sel(tv);
+  const aviso = tv!==pedido ? `O TSE ainda não publicou o perfil do ${pedido}º turno de ${st.ano}; o quadro usa o ${tv}º turno.` : "";
+  if(!C.length){
+    body.innerHTML=`<div class="empty"><svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div><h3>Sem perfil do comparecimento para ${st.ano}</h3><p>O arquivo <code>${CONFIG.eleicoes.find(e=>e.ano==st.ano)?.perfil}</code> não trouxe linhas para ${st.uf==="BR"?"o Brasil":st.uf}. Confira o arquivo no Controle dos dados.</p></div></div>`;
+    $("#h9").textContent="Quem votou: idade e gênero dos eleitores que compareceram"; return; }
+  body.innerHTML=`<div class="cols3"><div class="block"><h3 id="qv-t0"></h3><div class="chart" id="heat-comp"></div></div>
+    <div class="block"><h3 id="qv-t1"></h3><div class="chart" id="heat-ix-PT"></div></div><div class="block"><h3 id="qv-t2"></h3><div class="chart" id="heat-ix-PL"></div></div></div>
+    <div class="legend"><span>0%</span><span class="ramp" id="comp-ramp"></span><span id="comp-max"></span><span style="margin-left:8px">mesma escala nas três grades</span></div>${aviso?`<p class="sub" style="margin:0">${aviso}</p>`:""}`;
+  const tot=C.reduce((s,r)=>s+r.comparecimento,0); const pc={}; C.forEach(r=>pc[r.faixa+"|"+r.genero]=(pc[r.faixa+"|"+r.genero]||0)+100*r.comparecimento/tot);
+  const terr=st.uf==="BR"?"Brasil":st.uf; $("#qv-t0").textContent=`Quem compareceu · ${terr} · ${tv}º turno de ${st.ano}`;
+  $("#qv-t1").textContent=`Impressões · ${nome("PT")} · ${per()}`; $("#qv-t2").textContent=`Impressões · ${nome("PL")} · ${per()}`;
+  const dd={PT:distr("PT"),PL:distr("PL")};
+  const cmax=Math.max(...Object.values(pc),...Object.values(dd.PT||{}),...Object.values(dd.PL||{}));
+  heat("#heat-comp",(f,gn)=>pc[f+"|"+gn],v=>sequential(v/cmax),v=>fmtN(v,1),"Perfil de quem votou",
+    (f,gn,v)=>`<b>${gl(gn)}, ${f} anos</b>${row("% de quem compareceu",fmtPct(v))}${row("% das impressões PT",fmtPct(dd.PT?.[f+"|"+gn]))}${row("% das impressões PL",fmtPct(dd.PL?.[f+"|"+gn]))}`);
+  ["PT","PL"].forEach(c=>{ const d=dd[c]; if(!d){ $("#heat-ix-"+c).innerHTML=`<p class="sub">Sem impressões neste recorte.</p>`; return; }
+    heat("#heat-ix-"+c,(f,gn)=>d[f+"|"+gn]??0,v=>sequential(v/cmax),v=>fmtN(v,1),"Impressões "+c,
+      (f,gn,v)=>`<b>${gl(gn)}, ${f} anos</b>${row("% das impressões "+c,fmtPct(v))}${row("% de quem compareceu",fmtPct(pc[f+"|"+gn]))}`); });
+  $("#comp-ramp").style.background=`linear-gradient(90deg,${[0,.25,.5,.75,1].map(sequential).join(",")})`; $("#comp-max").textContent=fmtPct(cmax);
+  const big=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0]; const [bf,bg]=big[0].split("|");
+  $("#h9").textContent=`${gl(bg)} de ${bf} anos foram o maior grupo entre os votantes (${fmtPct(big[1])}) · ${tv}º turno de ${st.ano}`;
+}
+
+/* ---------- 11 modelos ---------- */
+function renderModelos(){
+  const box=$("#modelos"); const M=D.modelos||[];
+  if(!M.length){ box.innerHTML=`<p class="sub" style="padding:12px">Sem modelos.</p>`; return; }
+  box.innerHTML=`<table class="data"><thead><tr><th class="l">Modelo</th><th class="l">Termo</th><th>Coef.</th><th>EP</th><th>p</th><th>R²</th><th>n</th></tr></thead><tbody>${
+    M.map(r=>`<tr><td class="l">${r.modelo.replace(/· Campanha:? /,"· campanha ")}</td><td class="l">${r.termo}</td><td>${fmtN(r.estimativa,3)}</td><td>${fmtN(r.ep,3)}</td><td><span class="sig ${r.p<.05?"yes":""}">${r.p<.001?"<0,001":fmtN(r.p,3)}</span></td><td>${ok(r.r2)?fmtN(r.r2,2):"—"}</td><td>${r.n??"—"}</td></tr>`).join("")}</tbody></table>`;
+}
+
+/* ---------- 13 tabela ---------- */
+const pill = (r,t) => `<span class="pill ${r==="Positiva"?"pos":"neg"}">${r==="Positiva"?"▲":"▼"} ${t||r}</span>`;
+function cellLead(v, t){ const c=v>0?"pt":v<0?"pl":null; return c?`<span class="lead-cell"><span class="dot" style="background:var(--${c})"></span>${t}</span>`:t; }
+function seta(v, t){ return `<span class="lead-cell">${t} <span aria-hidden="true" style="color:var(--ink-3)">${v>0?"↑":v<0?"↓":"·"}</span></span>`; }
+let tabelaAtual={head:[],rows:[]};
+function sortRows(R){ if(!R.length) return R; if(!(st.sortKey in R[0])){ st.sortKey="uf"; st.sortDir=1; }
+  return [...R].sort((a,b)=>{ const x=a[st.sortKey],y=b[st.sortKey]; return (typeof x==="string"?x.localeCompare(y):(x-y))*st.sortDir; }); }
+function thSort(c,label,cls=""){ const k=st.sortKey===c; return `<th class="${cls}" data-k="${c}" tabindex="0" aria-sort="${k?(st.sortDir>0?"ascending":"descending"):"none"}">${label}${k?(st.sortDir>0?" ↑":" ↓"):""}</th>`; }
+function bindSort(re){ $("#tabela").querySelectorAll("th[data-k]").forEach(th=>{ const go=()=>{ const c=th.dataset.k; st.sortDir= st.sortKey===c? -st.sortDir : (c==="uf"||c.startsWith("rel")?1:-1); st.sortKey=c; re(); };
+  th.onclick=go; th.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } }; }); }
+function renderTabela(L){
+  $("#f-comp2").hidden = st.tab!=="var";
+  if(st.tab==="var") return renderTabelaVar();
+  const R=sortRows(L); const T=L.reduce((s,o)=>({gPT:s.gPT+o.gPT,gPL:s.gPL+o.gPL,vPT:s.vPT+o.vPT,vPL:s.vPL+o.vPL}),{gPT:0,gPL:0,vPT:0,vPL:0});
+  const tdG=T.gPT-T.gPL, tdV=T.vPT-T.vPL; const dh=(c,t)=>`<span class="lead-cell"><span class="dot" style="background:var(--${c})"></span>${t}</span>`;
+  $("#tabela").innerHTML=`<table class="data"><thead><tr>${thSort("uf","UF","l")}${thSort("gPT",dh("pt","Invest. PT"))}${thSort("gPL",dh("pl","Invest. PL"))}${thSort("vPT",dh("pt","Votos PT"))}${thSort("vPL",dh("pl","Votos PL"))}${thSort("difG","Dif. investimento<br>PT − PL")}${thSort("difV","Dif. votos<br>PT − PL")}${thSort("rel","Relação","c")}</tr></thead>
+    <tbody>${R.map(o=>`<tr><td class="l"><b>${o.uf}</b> <span style="color:var(--ink-3)">${o.nome_uf}</span></td><td>${fmtBRLfull(o.gPT)}</td><td>${fmtBRLfull(o.gPL)}</td><td>${fmtN(o.vPT)}</td><td>${fmtN(o.vPL)}</td><td>${cellLead(o.difG,fmtBRLsig(o.difG))}</td><td>${cellLead(o.difV,fmtSigned(o.difV))}</td><td class="c">${pill(o.rel)}</td></tr>`).join("")}</tbody>
+    <tfoot><tr><td class="l">27 UFs</td><td>${fmtBRLfull(T.gPT)}</td><td>${fmtBRLfull(T.gPL)}</td><td>${fmtN(T.vPT)}</td><td>${fmtN(T.vPL)}</td><td>${cellLead(tdG,fmtBRLsig(tdG))}</td><td>${cellLead(tdV,fmtSigned(tdV))}</td><td class="c">${pill(Math.sign(tdG)===Math.sign(tdV)?"Positiva":"Negativa")}</td></tr></tfoot></table>`;
+  bindSort(()=>renderTabela(L));
+  const pos=L.filter(o=>o.rel==="Positiva").length;
+  $("#h11").textContent=`${Per()}: quem investiu mais teve mais votos em ${pos} das 27 UFs`;
+  $("#d11").textContent="Relação positiva: o candidato que investiu mais na UF também recebeu mais votos nela.";
+  $("#tab-resumo").innerHTML=`${pill("Positiva","Positiva em "+pos+" UFs")} ${pill("Negativa","Negativa em "+(L.length-pos)+" UFs")}`;
+  tabelaAtual={head:["UF","Investimento PT (R$)","Investimento PL (R$)","Votos PT","Votos PL","Dif. investimento PT-PL (R$)","Dif. votos PT-PL","Relação"],rows:R.map(o=>[o.uf,o.gPT,o.gPL,o.vPT,o.vPL,o.difG,o.difV,o.rel])};
+}
+function renderTabelaVar(){
+  const c=COMPS[st.comp]; const V=variacao();
+  if(!V.length){ $("#tabela").innerHTML=`<p class="sub" style="padding:12px">Sem dados para esta comparação.</p>`; $("#tab-resumo").innerHTML=""; return; }
+  const R=sortRows(V); const [r0,r1]=c.curto; const plLab="PL · "+quem("PL",c);
+  const S=["PT","PL"].map(p=>({dG:V.reduce((s,r)=>s+r["dG"+p],0), dV:V.reduce((s,r)=>s+r["dV"+p],0)}));
+  const grp=(p,lab)=>`<th class="grp ${p==="PL"?"sep":""}" colspan="3"><span class="lead-cell" style="justify-content:center"><span class="dot" style="background:var(--${p.toLowerCase()})"></span>${lab}</span></th>`;
+  const tc=(r,p,t)=>t==="g"?`${r0}: ${fmtBRLfull(r.a["g"+p])} → ${r1}: ${fmtBRLfull(r.b["g"+p])}`:`${r0}: ${fmtN(r.a["v"+p])} → ${r1}: ${fmtN(r.b["v"+p])}`;
+  $("#tabela").innerHTML=`<table class="data"><thead><tr><th class="l"></th>${grp("PT","PT · "+quem("PT",c))}${grp("PL",plLab)}</tr>
+    <tr>${thSort("uf","UF","l")}${thSort("dGPT","Δ investimento")}${thSort("dVPT","Δ votos")}${thSort("relPT","Relação","c")}${thSort("dGPL","Δ investimento","sep")}${thSort("dVPL","Δ votos")}${thSort("relPL","Relação","c")}</tr></thead>
+    <tbody>${R.map(r=>`<tr><td class="l"><b>${r.uf}</b> <span style="color:var(--ink-3)">${r.nome_uf}</span></td>${["PT","PL"].map(p=>`<td class="${p==="PL"?"sep":""}" title="${tc(r,p,"g")}">${seta(r["dG"+p],fmtBRLsig(r["dG"+p]))}</td><td title="${tc(r,p,"v")}">${seta(r["dV"+p],fmtSigned(r["dV"+p]))}</td><td class="c">${pill(r["rel"+p])}</td>`).join("")}</tr>`).join("")}</tbody>
+    <tfoot><tr><td class="l">27 UFs</td>${S.map((s,i)=>`<td class="${i?"sep":""}">${seta(s.dG,fmtBRLsig(s.dG))}</td><td>${seta(s.dV,fmtSigned(s.dV))}</td><td class="c">${pill(Math.sign(s.dG)===Math.sign(s.dV)?"Positiva":"Negativa")}</td>`).join("")}</tr></tfoot></table>`;
+  bindSort(renderTabelaVar);
+  const cnt=p=>V.filter(r=>r["rel"+p]==="Positiva").length;
+  $("#h11").textContent=`${c.rotulo}: investimento e votos andaram juntos em ${cnt("PT")} UFs para o PT e em ${cnt("PL")} para o PL`;
+  $("#d11").textContent=`Δ = ${r1} − ${r0}. Relação positiva: investiu mais e o voto subiu, ou investiu menos e o voto caiu.${st.comp==="camp"?" Campanha: investimento dos dois turnos e votos do turno final.":""}`;
+  $("#tab-resumo").innerHTML=`<strong>PT</strong> ${pill("Positiva","Positiva em "+cnt("PT"))} ${pill("Negativa","Negativa em "+(V.length-cnt("PT")))} <strong style="margin-left:10px">PL</strong> ${pill("Positiva","Positiva em "+cnt("PL"))} ${pill("Negativa","Negativa em "+(V.length-cnt("PL")))}`;
+  tabelaAtual={head:["UF","PT Δ investimento (R$)","PT Δ votos","PT relação","PL Δ investimento (R$)","PL Δ votos","PL relação"],rows:R.map(r=>[r.uf,r.dGPT,r.dVPT,r.relPT,r.dGPL,r.dVPL,r.relPL])};
+}
+$("#copiar").onclick=async()=>{
+  const tsv=[tabelaAtual.head.join("\t"),...tabelaAtual.rows.map(l=>l.map(v=>typeof v==="number"?String(Math.round(v)):v).join("\t"))].join("\n");
+  try{ await navigator.clipboard.writeText(tsv); $("#copy-status").textContent=`Copiado: ${tabelaAtual.rows.length} UFs`; }
+  catch(e){ $("#copy-status").textContent="Cópia bloqueada: selecione a tabela e use Ctrl+C"; }
+};
+
+/* ---------- 14 temas ---------- */
+function renderTemas(){
+  const box=$("#temas"); const T=D.temas||[]; if(!T.length){ $("#s-temas").hidden=true; return; }
+  const k=gk(), rot={}; (D.temas_rotulos||[]).forEach(r=>rot[r.tema]=r.rotulo);
+  const painel=(ano,campo)=>{ const t=st.turno===CAMP?CAMP:st.turno; const R=T.filter(r=>r.ano==ano&&r.turno==t&&r.campo===campo);
+    const tot=R.find(r=>r.tema==="_total"); const cor=`var(--${campo.toLowerCase()})`;
+    const head=`<div class="tm-head"><b>${nome(campo,ano)} · ${campo} · ${ano}</b><span>${tot?`${fmtBRL(tot[k])} · ${fmtN(tot.n_anuncios)} anúncios · ${fmtN(tot.n_pecas)} peças`:""}</span></div>`;
+    if(!tot||!(tot[k]>0)) return `<div class="tm-panel" style="--c:${cor}">${head}<div class="tm-empty">Sem anúncios no ${nomePer(ano,t)}.</div></div>`;
+    const sem=R.find(r=>r.tema==="_sem_tema"), stx=R.find(r=>r.tema==="_sem_texto");
+    const rows=R.filter(r=>!r.tema.startsWith("_")).map(r=>({...r,pct:100*r[k]/tot[k]})).sort((a,b)=>b[k]-a[k]);
+    const linhas=rows.map((r,i)=>{ const w=Math.max(.4,r.pct), inside=w>45;
+      return `<div class="tm-row${i<3&&r.pct>0?" top":""}" data-tip="${encodeURIComponent(JSON.stringify({t:rot[r.tema],a:ano,c:campo,g:r[k],p:r.pct,n:r.n_anuncios,pc:r.n_pecas}))}"><span class="rk">${i+1}</span><span class="tm-lab" title="${rot[r.tema]}">${rot[r.tema]||r.tema}</span>
+        <div class="tm-bar"><i style="width:${w}%"></i><span class="val" style="${inside?"left:8px;color:#fff":`left:calc(${w}% + 6px);color:var(--ink)`}">${fmtPct(r.pct,0)} · ${fmtBRL(r[k])}</span></div></div>`; }).join("");
+    const extra=[sem&&100*sem[k]/tot[k]>=0.5?`sem tema identificado: ${fmtPct(100*sem[k]/tot[k],0)}`:"", stx&&100*stx[k]/tot[k]>=0.5?`sem texto: ${fmtPct(100*stx[k]/tot[k],0)}`:""].filter(Boolean).join(" · ");
+    return `<div class="tm-panel" style="--c:${cor}">${head}${linhas}${extra?`<div style="font-size:12px;color:var(--ink-3);margin-top:2px">Investimento em anúncios ${extra}</div>`:""}</div>`; };
+  box.innerHTML=anos().flatMap(a=>["PT","PL"].map(c=>painel(a,c))).join("");
+  box.querySelectorAll(".tm-row").forEach(n=>{ const d=JSON.parse(decodeURIComponent(n.dataset.tip));
+    bindTip(n,()=>`<b>${d.t}</b><br>${nome(d.c,d.a)} (${d.c}) · ${d.a}<br>Investimento: ${fmtBRLfull(d.g)} (${fmtPct(d.p,1)})<br>${fmtN(d.n)} anúncios · ${fmtN(d.pc)} peças`); });
+}
+/* ---------- principal ---------- */
+function renderIntro(){ const cv=D.cobertura||[]; const n=cv.reduce((s,x)=>s+x.n,0), p=cv.reduce((s,x)=>s+(x.pecas||0),0);
+  const inv=anos().reduce((s,a)=>s+resumo(a,CAMP,"PT")[gk()]+resumo(a,CAMP,"PL")[gk()],0);
+  $("#intro-chips").innerHTML=`<span class="chip"><b>${anos().length}</b> eleições</span><span class="chip"><b>27</b> UFs</span><span class="chip"><b>${fmtN(n)}</b> anúncios</span><span class="chip"><b>${fmtN(p)}</b> peças distintas</span><span class="chip"><b>${fmtBRL(inv)}</b> investidos</span>`; }
+function isDark(){ const t=document.documentElement.dataset.theme; return t==="dark" || (t!=="light" && matchMedia("(prefers-color-scheme: dark)").matches); }
+function aplicarCores(){ const esc=isDark(); LADOS.forEach(l=>{ const c=CONFIG.lados[l]; document.documentElement.style.setProperty("--"+l.toLowerCase(), esc?(c.cor_escuro||c.cor):c.cor); }); }
+// Troca "PT"/"PL" pelas siglas configuradas (só age se elas forem diferentes)
+const mudaSigla = LADOS.some(l=>CONFIG.lados[l].sigla!==l);
+const siglas = s => mudaSigla ? String(s).replace(/\b(PT|PL)\b/g, m=>CONFIG.lados[m].sigla) : s;
+function aplicarSiglas(){ if(!mudaSigla) return; const w=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement.closest("script,style,code")) continue; const t=siglas(n.nodeValue); if(t!==n.nodeValue) n.nodeValue=t; } }
+function renderAll(){ aplicarCores(); setupControls(); const L=linhas(); renderCover(); renderIntro(); renderAnos(); renderTemas(); renderLit();
+  if(L.length){ renderOverview(L); renderMaps(L); renderButterflies(L); renderScatter(L); renderQuemVotou(); renderTabela(L); }
+  renderCompare(); renderModelos(); aplicarSiglas(); }
+function iniciar(){
+  document.body.classList.remove("aguardando");
+  COMPS=gerarComps(); if(!COMPS[st.comp]) st.comp=Object.keys(COMPS)[0];
+  if(!anos().includes(st.ano)) st.ano=anos().at(-1);
+  $("#status").textContent = D.meta?.gerado_em ? `Dados lidos em ${D.meta.gerado_em.split("-").reverse().join("/")}` : "";
+  $("#rodape").innerHTML = `<b>Fontes:</b> ${D.meta?.fonte_meta||"Biblioteca de Anúncios da Meta"} · votos: ${D.meta?.fonte_votos||"TSE"}`;
+  renderAll();
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", ()=>{ if(D) renderAll(); });
+new MutationObserver(()=>{ if(D) renderAll(); }).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+prepararCarregamento();
+</script>
+
+</body>
+</html>
